@@ -1,42 +1,64 @@
 <!DOCTYPE html>
 <html lang="rw">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website yanjye</title>
+  <meta charset="UTF-8">
+  <title>Yves Pi App</title>
+  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #0f172a;
-            color: white;
-            text-align: center;
-            padding: 50px;
-        }
-        h1 {
-            color: #38bdf8;
-        }
-        p {
-            font-size: 18px;
-        }
-        button {
-            padding: 10px 20px;
-            border: none;
-            background: #38bdf8;
-            color: black;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-    </style>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #0b1a2f;
+      color: white;
+      padding-top: 80px;
+    }
+
+    h1 {
+      color: #4fc3f7;
+    }
+
+    button {
+      padding: 15px 25px;
+      font-size: 18px;
+      background-color: #4fc3f7;
+      color: black;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #29b6f6;
+    }
+  </style>
 </head>
+
 <body>
 
-    <h1>Murakaza neza 🎉</h1>
-    <p>Iyi ni website yanjye ya mbere kuri GitHub Pages</p>
+  <h1>Murakaza neza 🎉</h1>
+  <p>Iyi ni Pi App ya Yves</p>
 
-    <button onclick="alert('Murakoze gusura site yanjye!')">
-        Kanda hano
-    </button>
+  <button onclick="pay()">Pay with Pi</button>
+
+  <script>
+    Pi.init({ version: "2.0" });
+
+    async function pay() {
+      try {
+        const payment = await Pi.createPayment({
+          amount: 0.1,
+          memo: "Test payment",
+          metadata: { user: "Yves" }
+        });
+
+        alert("Payment yakozwe neza!");
+      } catch (error) {
+        alert("Payment yanse!");
+        console.error(error);
+      }
+    }
+  </script>
 
 </body>
 </html>
