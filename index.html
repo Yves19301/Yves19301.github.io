@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Pi Payment Test</title>
+  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 </head>
 
 <body>
@@ -11,61 +12,48 @@
   <br><br>
   <button onclick="pay()">Pay with Pi</button>
 
-  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-
   <script>
-    let currentUser = null;
-
-    // Kurindira SDK ibe loaded neza
-    document.addEventListener("DOMContentLoaded", () => {
-      if (window.Pi) {
-        Pi.init({ version: "2.0", sandbox: true });
-      } else {
-        alert("Pi SDK ntabwo yikoreye neza");
-      }
+    Pi.init({
+      version: "2.0",
+      sandbox: true
     });
 
     async function login() {
       try {
         const scopes = ['username', 'payments'];
-        const auth = await Pi.authenticate(scopes);
-        currentUser = auth.user;
-
-        alert("Login success: " + currentUser.username);
+        const auth = await Pi.authenticate(scopes, onIncompletePaymentFound);
+        alert("Login success: " + auth.user.username);
       } catch (err) {
         console.error(err);
       }
     }
 
-    async function pay() {
-      if (!currentUser) {
-        alert("Banza ukore Login");
-        return;
-      }
+    function onIncompletePaymentFound(payment) {
+      console.log("Incomplete payment found", payment);
+    }
 
+    async function pay() {
       try {
         await Pi.createPayment({
           amount: 1,
           memo: "Test payment",
-          metadata: {
-            item: "test",
-            user: currentUser.username
-          }
+          metadata: { test: "ok" }
         }, {
           onReadyForServerApproval: async (paymentId) => {
             await fetch("https://pi-server-3pra.onrender.com/approve", {
               method: "POST",
-              headers: { "Content-Type": "application/json" },
+              headers: {"Content-Type": "application/json"},
               body: JSON.stringify({ paymentId })
             });
           },
           onReadyForServerCompletion: async (paymentId, txid) => {
             await fetch("https://pi-server-3pra.onrender.com/complete", {
               method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ paymentId, txid })
+              headers: {"Content-Type": "application/json"}      body: JSON.stringify({ paymentId, txid })
             });
-          }
+          },
+          onCancel: () => alert("Cancelled"),
+          onError: (err) => console.error(err)
         });
 
       } catch (e) {
