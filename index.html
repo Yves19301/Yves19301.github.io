@@ -1,61 +1,42 @@
 <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+<script>
+  Pi.init({ version: "2.0" });
+
+  const backendURL = "https://pi-server-3pra.onrender.com";
+
+  function pay() {
+    Pi.createPayment({
+      amount: 1,
+      memo: "Test Payment",
+      metadata: { type: "test" }
+    }, {
+      onReadyForServerApproval: function(paymentId) {
+        // 🔥 AHA niho approve iba
+        fetch(`${backendURL}/approve`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ paymentId })
+        });
+      },
+
+      onReadyForServerCompletion: function(paymentId, txid) {
+        // 🔥 AHA niho complete iba
+        fetch(`${backendURL}/complete`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ paymentId, txid })
+        });
+      },
+
+      onCancel: function(paymentId) {
+        console.log("Payment cancelled");
+      },
+
+      onError: function(error, payment) {
+        console.error("Payment error", error);
+      }
+    });
+  }
+</script>
 
 <button onclick="pay()">Pay with Pi</button>
-
-<script>
-Pi.init({ version: "2.0", sandbox: true });
-
-let user = null;
-
-// login ONLY when page loads AND when user interacts
-async function login() {
-  try {
-    user = await Pi.authenticate(['payments']);
-    console.log("User authenticated:", user);
-  } catch (err) {
-    console.error("Auth error:", err);
-  }
-}
-
-// call login when page loads
-window.onload = login;
-
-async function pay() {
-  // ensure user is authenticated
-  if (!user) {
-    await login();
-  }
-
-  if (!user) {
-    alert("Authentication failed");
-    return;
-  }
-
-  Pi.createPayment({
-    amount: 1,
-    memo: "Test payment",
-    metadata: { itemId: "123" }
-  }, {
-    onReadyForServerApproval: function(paymentId) {
-      fetch("https://pi-server-3pra.onrender.com/approve", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ paymentId })
-      });
-    },
-    onReadyForServerCompletion: function(paymentId, txid) {
-      fetch("https://pi-server-3pra.onrender.com/complete", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ paymentId, txid })
-      });
-    },
-    onCancel: function() {
-      console.log("Cancelled");
-    },
-    onError: function(error) {
-      console.error("Payment error:", error);
-    }
-  });
-}
-</script>
