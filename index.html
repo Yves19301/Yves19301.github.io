@@ -1,1 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pi Payment Test</title>
+  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+</head>
 
+<body>
+  <h2>Pi Payment Test</h2>
+  <button onclick="pay()">Pay with Pi</button>
+
+  <script>
+    Pi.init({ version: "2.0" });
+
+    async function pay() {
+      try {
+        await Pi.createPayment({
+          amount: 1,
+          memo: "Test payment",
+          metadata: {}
+        }, {
+          onReadyForServerApproval: async (paymentId) => {
+            await fetch("https://pi-server-3pra.onrender.com/approve", {
+              method: "POST",
+              headers: {"Content-Type": "application/json"},
+              body: JSON.stringify({ paymentId })
+            });
+          },
+          onReadyForServerCompletion: async (paymentId, txid) => {
+            await fetch("https://pi-server-3pra.onrender.com/complete", {
+              method: "POST",
+              headers: {"Content-Type": "application/json"},
+              body: JSON.stringify({ paymentId, txid })
+            });
+          },
+          onCancel: () => alert("Cancelled"),
+          onError: (err) => console.error(err)
+        });
+
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  </script>
+</body>
+</html>
