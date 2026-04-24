@@ -17,21 +17,25 @@
 
     let currentUser = null;
 
+    // LOGIN
     async function login() {
       try {
         const scopes = ['username', 'payments'];
         const auth = await Pi.authenticate(scopes);
         currentUser = auth.user;
-        console.log("Logged in:", auth);
+
         alert("Login success: " + currentUser.username);
+        console.log(auth);
+
       } catch (err) {
-        console.error(err);
+        console.error("Login error:", err);
       }
     }
 
+    // PAYMENT
     async function pay() {
       if (!currentUser) {
-        alert("Banze ubanze Login with Pi");
+        alert("Banza ukore Login with Pi");
         return;
       }
 
@@ -39,35 +43,20 @@
         await Pi.createPayment({
           amount: 1,
           memo: "Test payment",
-          metadata: {}
+          metadata: {
+            item: "test",
+            user: currentUser.username
+          }
         }, {
           onReadyForServerApproval: async (paymentId) => {
             await fetch("https://pi-server-3pra.onrender.com/approve", {
               method: "POST",
-              headers: {"Content-Type": "application/json"},
+              headers: {
+                "Content-Type": "application/json"
+              },
               body: JSON.stringify({ paymentId })
             });
           },
 
           onReadyForServerCompletion: async (paymentId, txid) => {
-            await fetch("https://pi-server-3pra.onrender.com/complete", {
-              method: "POST",
-              headers: {"Content-Type": "application/json"},
-              body: JSON.stringify({ paymentId, txid })
-            });
-          },
-
-          onCancel: () => alert("Cancelled"),
-
-          onError: (err) => {
-            console.error("Payment error:", err);
-          }
-        });
-
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  </script>
-</body>
-</html>
+            await
