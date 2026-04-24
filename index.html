@@ -7,12 +7,34 @@
 
 <body>
   <h2>Pi Payment Test</h2>
+
+  <button onclick="login()">Login with Pi</button>
+  <br><br>
   <button onclick="pay()">Pay with Pi</button>
 
   <script>
     Pi.init({ version: "2.0" });
 
+    let currentUser = null;
+
+    async function login() {
+      try {
+        const scopes = ['username', 'payments'];
+        const auth = await Pi.authenticate(scopes);
+        currentUser = auth.user;
+        console.log("Logged in:", auth);
+        alert("Login success: " + currentUser.username);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
     async function pay() {
+      if (!currentUser) {
+        alert("Banze ubanze Login with Pi");
+        return;
+      }
+
       try {
         await Pi.createPayment({
           amount: 1,
@@ -26,6 +48,7 @@
               body: JSON.stringify({ paymentId })
             });
           },
+
           onReadyForServerCompletion: async (paymentId, txid) => {
             await fetch("https://pi-server-3pra.onrender.com/complete", {
               method: "POST",
@@ -33,8 +56,12 @@
               body: JSON.stringify({ paymentId, txid })
             });
           },
+
           onCancel: () => alert("Cancelled"),
-          onError: (err) => console.error(err)
+
+          onError: (err) => {
+            console.error("Payment error:", err);
+          }
         });
 
       } catch (e) {
