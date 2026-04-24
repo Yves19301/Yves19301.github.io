@@ -5,6 +5,13 @@
 <script>
 Pi.init({ version: "2.0" });
 
+// 🔥 THIS IS REQUIRED
+Pi.authenticate([], function(auth) {
+  console.log("User authenticated", auth);
+}, function(error) {
+  console.error(error);
+});
+
 function pay() {
   Pi.createPayment({
     amount: 1,
