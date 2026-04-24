@@ -9,6 +9,8 @@
 
 <h2>Pi Payment Test</h2>
 
+<button onclick="login()">Login with Pi</button>
+<br><br>
 <button onclick="pay()">Pay with Pi</button>
 
 <script>
@@ -16,15 +18,30 @@
 
   const backendURL = "https://pi-server-3pra.onrender.com";
 
+  let currentUser = null;
+
+  // 🔐 LOGIN FIRST
+  function login() {
+    Pi.authenticate(["payments"], function(user) {
+      console.log("User:", user);
+      currentUser = user;
+      alert("Logged in!");
+    });
+  }
+
+  // 💰 PAYMENT
   function pay() {
+    if (!currentUser) {
+      alert("Please login first");
+      return;
+    }
+
     Pi.createPayment({
       amount: 1,
       memo: "Test Payment",
       metadata: { type: "test" }
     }, {
       onReadyForServerApproval: function(paymentId) {
-        console.log("Approving...", paymentId);
-
         fetch(`${backendURL}/approve`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -33,8 +50,6 @@
       },
 
       onReadyForServerCompletion: function(paymentId, txid) {
-        console.log("Completing...", paymentId, txid);
-
         fetch(`${backendURL}/complete`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -42,7 +57,7 @@
         });
       },
 
-      onCancel: function(paymentId) {
+      onCancel: function() {
         console.log("Cancelled");
       },
 
