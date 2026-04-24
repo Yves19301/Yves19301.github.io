@@ -1,26 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Socker App</title>
+  <title>Pi Payment Test</title>
+  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 </head>
 <body>
 
-<h2>Pi Payment Test</h2>
+<h1>Pi Payment Test</h1>
 
 <button onclick="pay()">Pay with Pi</button>
-
-<script src="https://sdk.minepi.com/pi-sdk.js"></script>
 
 <script>
 Pi.init({ version: "2.0", sandbox: true });
 
-Pi.authenticate([], function(auth) {
-  console.log("Auth:", auth);
-}, function(error) {
-  console.error("Auth error:", error);
-});
+let user;
+
+async function login() {
+  try {
+    user = await Pi.authenticate([]);
+    console.log("User:", user);
+  } catch (err) {
+    console.error("Auth error:", err);
+  }
+}
+
+login();
 
 function pay() {
+  if (!user) {
+    alert("User not authenticated yet");
+    return;
+  }
+
   Pi.createPayment({
     amount: 1,
     memo: "Test payment",
