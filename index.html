@@ -1,21 +1,29 @@
-<script src="https://sdk.minepi.com/pi-sdk.js"></script>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Socker App</title>
+</head>
+<body>
+
+<h2>Pi Payment Test</h2>
 
 <button onclick="pay()">Pay with Pi</button>
 
-<script>
-Pi.init({ version: "2.0" });
+<script src="https://sdk.minepi.com/pi-sdk.js"></script>
 
-// 🔥 THIS IS REQUIRED
+<script>
+Pi.init({ version: "2.0", sandbox: true });
+
 Pi.authenticate([], function(auth) {
-  console.log("User authenticated", auth);
+  console.log("Auth:", auth);
 }, function(error) {
-  console.error(error);
+  console.error("Auth error:", error);
 });
 
 function pay() {
   Pi.createPayment({
     amount: 1,
-    memo: "Buy item",
+    memo: "Test payment",
     metadata: { itemId: "123" }
   }, {
     onReadyForServerApproval: function(paymentId) {
@@ -33,11 +41,14 @@ function pay() {
       });
     },
     onCancel: function() {
-      console.log("Payment cancelled");
+      console.log("Cancelled");
     },
     onError: function(error) {
-      console.error(error);
+      console.error("Payment error:", error);
     }
   });
 }
 </script>
+
+</body>
+</html>
