@@ -2,7 +2,6 @@
 <html>
 <head>
   <title>Pi Payment Test</title>
-  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 </head>
 
 <body>
@@ -12,12 +11,20 @@
   <br><br>
   <button onclick="pay()">Pay with Pi</button>
 
+  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+
   <script>
-    ;
-Pi.init({ version: "2.0", sandbox: true });
     let currentUser = null;
 
-    // LOGIN
+    // Kurindira SDK ibe loaded neza
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.Pi) {
+        Pi.init({ version: "2.0", sandbox: true });
+      } else {
+        alert("Pi SDK ntabwo yikoreye neza");
+      }
+    });
+
     async function login() {
       try {
         const scopes = ['username', 'payments'];
@@ -25,17 +32,14 @@ Pi.init({ version: "2.0", sandbox: true });
         currentUser = auth.user;
 
         alert("Login success: " + currentUser.username);
-        console.log(auth);
-
       } catch (err) {
-        console.error("Login error:", err);
+        console.error(err);
       }
     }
 
-    // PAYMENT
     async function pay() {
       if (!currentUser) {
-        alert("Banza ukore Login with Pi");
+        alert("Banza ukore Login");
         return;
       }
 
@@ -51,12 +55,23 @@ Pi.init({ version: "2.0", sandbox: true });
           onReadyForServerApproval: async (paymentId) => {
             await fetch("https://pi-server-3pra.onrender.com/approve", {
               method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
+              headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ paymentId })
             });
           },
-
           onReadyForServerCompletion: async (paymentId, txid) => {
-            await
+            await fetch("https://pi-server-3pra.onrender.com/complete", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ paymentId, txid })
+            });
+          }
+        });
+
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  </script>
+</body>
+</html>
