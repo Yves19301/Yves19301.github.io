@@ -53,7 +53,7 @@
           },
 
           onReadyForServerCompletion: async (paymentId, txid) => {
-            await fetch("https://pi-server-3pra.onrender.com/complete", {
+             fetch("https://pi-server-3pra.onrender.com/complete", {
               method: "POST",
               headers: {"Content-Type": "application/json"},
               body: JSON.stringify({ paymentId, txid })
