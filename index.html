@@ -13,31 +13,36 @@
   <button onclick="pay()">Pay with Pi</button>
 
   <script>
-    Pi.init({
-      version: "2.0",
-      sandbox: true
-    });
+    Pi.init({ version: "2.0", sandbox: true });
 
+    let currentUser = null;
+
+    // LOGIN
     async function login() {
       try {
         const scopes = ['username', 'payments'];
-        const auth = await Pi.authenticate(scopes, onIncompletePaymentFound);
-        alert("Login success: " + auth.user.username);
+        const auth = await Pi.authenticate(scopes);
+        currentUser = auth.user;
+        alert("Login success: " + currentUser.username);
       } catch (err) {
-        console.error(err);
+        console.error("Login error:", err);
       }
     }
 
-    function onIncompletePaymentFound(payment) {
-      console.log("Incomplete payment found", payment);
-    }
-
+    // PAYMENT
     async function pay() {
+      if (!currentUser) {
+        alert("Banza ukore Login with Pi");
+        return;
+      }
+
       try {
         await Pi.createPayment({
           amount: 1,
           memo: "Test payment",
-          metadata: { test: "ok" }
+          metadata: {
+            item: "test"
+          }
         }, {
           onReadyForServerApproval: async (paymentId) => {
             await fetch("https://pi-server-3pra.onrender.com/approve", {
@@ -46,12 +51,15 @@
               body: JSON.stringify({ paymentId })
             });
           },
+
           onReadyForServerCompletion: async (paymentId, txid) => {
             await fetch("https://pi-server-3pra.onrender.com/complete", {
               method: "POST",
-              headers: {"Content-Type": "application/json"}      body: JSON.stringify({ paymentId, txid })
+              headers: {"Content-Type": "application/json"},
+              body: JSON.stringify({ paymentId, txid })
             });
           },
+
           onCancel: () => alert("Cancelled"),
           onError: (err) => console.error(err)
         });
