@@ -44,12 +44,20 @@
             item: "test"
           }
         }, {
-          onReadyForServerApproval: async (paymentId) => {
-            await fetch("https://pi-server-3pra.onrender.com/approve", {
-              method: "POST",
-              headers: {"Content-Type": "application/json"},
-              body: JSON.stringify({ paymentId })
-            });
+          onReadyForServerApproval: async (paymentId) => { })
+            });onReadyForServerApproval: async function(paymentId) {
+  const res = await fetch(backendURL + "/approve-payment", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ paymentId })
+  });
+
+  if (!res.ok) {
+    alert("Approval failed ❌");
+  }
+},
           },
 
           onReadyForServerCompletion: async (paymentId, txid) => {
