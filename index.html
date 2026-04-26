@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head><script src="https://sdk.minepi.com/pi-sdk.js"></script>
+<head>
   <title>Pi Payment Test</title>
   <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 </head>
@@ -12,9 +12,10 @@
   <br><br>
   <button onclick="pay()">Pay with Pi</button>
 
-  <script>Pi.init({ version: "2.0" });
+  <script>
     Pi.init({ version: "2.0", sandbox: true });
 
+    const backendURL = "https://pi-server-3pra.onrender.com";
     let currentUser = null;
 
     // LOGIN
@@ -40,50 +41,41 @@
         await Pi.createPayment({
           amount: 1,
           memo: "Test payment",
-          metadata: {
-            item: "test"
-          }
+          metadata: { item: "test" }
         }, {
-          onReadyForServerApproval: async (paymentId) => { })
-            });onReadyForServerApproval: async function(paymentId) {
-  const res = await fetch(backendURL + "/approve-payment", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ paymentId })
-  });
+          onReadyForServerApproval: async function(paymentId) {
+            const res = await fetch(backendURL + "/approve-payment", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ paymentId })
+            });
 
-  if (!res.ok) {
-    alert("Approval failed ❌");
-  }
-},
+            if (!res.ok) alert("Approval failed ❌");
           },
 
-          onReadyForServerCompletion: async (paymentId, txid) => {})
-            });onReadyForServerCompletion: async function(paymentId, txid) {
-  const res = await fetch(backendURL + "/complete-payment", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ paymentId, txid })
-  });
+          onReadyForServerCompletion: async function(paymentId, txid) {
+            const res = await fetch(backendURL + "/complete-payment", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ paymentId, txid })
+            });
 
-  if (!res.ok) {
-    alert("Completion failed ❌");
-  }
-},
+            if (!res.ok) alert("Completion failed ❌");
           },
 
-          onCancel: () => alert("Cancelled"),
-          onError: (err) => console.error(err)
+          onCancel: function() {
+            alert("Payment cancelled");
+          },
+
+          onError: function(err) {
+            console.error(err);
+          }
         });
 
       } catch (e) {
         console.error(e);
       }
     }
-  </script>const backendURL = "https://pi-server-3pra.onrender.com";
+  </script>
 </body>
 </html>
