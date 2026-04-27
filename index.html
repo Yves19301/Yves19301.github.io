@@ -1,85 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Pi Payment Stable</title>
-  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-</head>
-
-<body>
-  <h2>Pi Payment Test</h2>
-
-  <button onclick="login()">Login with Pi</button>
-  <br><br>
-  <button onclick="pay()">Pay with Pi</button>
-
-  <p id="status"></p>
-
-  <script>
-    Pi.init({ version: "2.0", sandbox: true });
-
-    const backendURL = "https://pi-server-3pra.onrender.com";
-    let currentUser = null;
-    let paymentRunning = false;
-
-    function setStatus(msg) {
-      document.getElementById("status").innerText = msg;
-    }
-
-    // ======================
-    // LOGIN
-    // ======================
-    async function login() {
-      try {
-        const scopes = ["username", "payments"];
-        const auth = await Pi.authenticate(scopes);
-
-        currentUser = auth.user;
-        setStatus("Login success: " + currentUser.username);
-
-      } catch (err) {
-        console.error(err);
-        setStatus("Login failed ❌");
-      }
-    }
-
-    // ======================
-    // PAYMENT
-    // ======================
-    async function pay() {
-
-      if (!currentUser) {
-        alert("Banza ukore Login with Pi");
-        return;
-      }
-
-      if (paymentRunning) {
-        alert("Payment iri gukorwa... tegereza");
-        return;
-      }
-
-      paymentRunning = true;
-      setStatus("Opening payment...");
-
-      try {
-
-        await Pi.createPayment(
-          {
-            amount: 1,
-            memo: "Test payment",
-            metadata: { item: "test" }
-          },
-
-          {
-            // ======================
-            // APPROVE
-            // ======================
-            onReadyForServerApproval: async function(paymentId) {
-              try {
-
-                setStatus("Approving payment...");
-
-                const res = await fetch(
-                  backendURL + "/approve-payment",
+backendURL + "/approve-payment",
                   {
                     method: "POST",
                     headers: {
@@ -120,52 +39,11 @@
                     },
                     body: JSON.stringify({
                       paymentId,
-                      txid
-                    })
-                  }
-                );
-
-                const data = await res.json();
-
-                if (!res.ok) {
-                  throw new Error("Completion failed");
-                }
-
-                setStatus("Payment Success ✅");
-
-              } catch (err) {
-                console.error(err);
-                setStatus("Completion failed ❌");
-              }
-
-              paymentRunning = false;
-            },
-
-            // ======================
-            // CANCEL
-            // ======================
-            onCancel: function() {
-              paymentRunning = false;
-              setStatus("Payment cancelled");
-            },
-
-            // ======================
-            // ERROR
-            // ======================
-            onError: function(err) {
-              paymentRunning = false;
-              console.error(err);
-              setStatus("Payment error ❌");
-            }
-          }
+        
         );
 
       } catch (err) {
         paymentRunning = false;
         console.error(err);
         setStatus("Payment failed ❌");
-      }
-    }
-  </script>
-</body>
-</html>
+      
