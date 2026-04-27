@@ -13,21 +13,29 @@
   <button onclick="pay()">Pay with Pi</button>
 
   <script>
+    // Pi Init
     Pi.init({ version: "2.0", sandbox: false });
 
     let currentUser = null;
+    const backendURL = "https://pi-server-3pra.onrender.com";
 
+    // LOGIN
     async function login() {
       try {
-        const scopes = ['username', 'payments'];
+        const scopes = ["username", "payments"];
         const auth = await Pi.authenticate(scopes);
+
         currentUser = auth.user;
+
         alert("Login success: " + currentUser.username);
+
       } catch (err) {
         console.error("Login error:", err);
+        alert("Login failed");
       }
     }
 
+    // PAYMENT
     async function pay() {
       if (!currentUser) {
         alert("Banza ukore Login with Pi");
@@ -35,33 +43,64 @@
       }
 
       try {
-        await Pi.createPayment({
-          amount: 1,
-          memo: "Test payment",
-          metadata: { item: "test" }
-        }, {
-          onReadyForServerApproval: async (paymentId) => {
-            await fetch("https://pi-server-3pra.onrender.com/approve-payment", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ paymentId })
-            });
+        await Pi.createPayment(
+          {
+            amount: 1,
+            memo: "Test payment",
+            metadata: {
+              item: "test"
+            }
           },
+          {
+            onReadyForServerApproval: async function(paymentId) {
+              alert("Approval started");
 
-          onReadyForServerCompletion: async (paymentId, txid) => {
-            await fetch("https://pi-server-3pra.onrender.com/complete-payment", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ paymentId, txid })
-            });
-          },
+              const res = await fetch(
+                backendURL + "/approve-payment",
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify({ paymentId })
+                }
+              );
 
-          onCancel: () => alert("Cancelled"),
-          onError: (err) => console.error(err)
-        });
+              alert("Approval status: " + res.status);
+            },
+
+            onReadyForServerCompletion: async function(paymentId, txid) {
+              const res = await fetch(
+                backendURL + "/complete-payment",
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify({
+                    paymentId,
+                    txid
+                  })
+                }
+              );
+
+              alert("Completion status: " + res.status);
+            },
+
+            onCancel: function() {
+              alert("Cancelled");
+            },
+
+            onError: function(error) {
+              console.error("Payment error:", error);
+              alert("Payment error");
+            }
+          }
+        );
 
       } catch (e) {
-        console.error(e);
+        console.error("Create payment error:", e);
+        alert("Create payment failed");
       }
     }
   </script>
