@@ -1,108 +1,247 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Pi Payment Test</title>
-  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOCKER APP</title>
+<script src="https://sdk.minepi.com/pi-sdk.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+font-family:Arial,sans-serif;
+background:#0b0b0b;
+color:#fff;
+padding-bottom:80px;
+}
+header{
+background:#111;
+padding:15px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+color:#22c55e;
+}
+.section{
+display:none;
+padding:18px;
+}
+.section.active{
+display:block;
+}
+.card{
+background:#161616;
+padding:15px;
+border-radius:12px;
+margin-bottom:15px;
+box-shadow:0 0 10px rgba(0,0,0,.3);
+}
+button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+background:#22c55e;
+color:#fff;
+font-size:16px;
+margin-top:10px;
+}
+nav{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:#111;
+display:flex;
+justify-content:space-around;
+padding:10px 0;
+border-top:1px solid #222;
+}
+nav button{
+width:auto;
+background:none;
+margin:0;
+font-size:14px;
+padding:8px;
+}
+h2{margin-bottom:15px;color:#22c55e;}
+p{line-height:1.5;}
+</style>
 </head>
 
 <body>
-  <h2>Pi Payment Test</h2>
 
-  <button onclick="login()">Login with Pi</button>
-  <br><br>
-  <button onclick="pay()">Pay with Pi</button>
+<header>SOCKER APP</header>
 
-  <script>
-    // Pi Init
-    Pi.init({ version: "2.0", sandbox: false });
+<!-- HOME -->
+<div id="home" class="section active">
+<h2>Home</h2>
 
-    let currentUser = null;
-    const backendURL = "https://pi-server-3pra.onrender.com";
+<div class="card">
+<h3>Welcome Back</h3>
+<p>Train, play and unlock premium football tools.</p>
+</div>
 
-    // LOGIN
-    async function login() {
-      try {
-        const scopes = ["username", "payments"];
-        const auth = await Pi.authenticate(scopes);
+<div class="card">
+<h3>Featured Bundle</h3>
+<p>Technical Skills Bundle - 1 Test Pi</p>
+<button onclick="buyItem('Technical Skills Bundle',1)">Buy Now</button>
+</div>
 
-        currentUser = auth.user;
+<div class="card">
+<h3>Latest Match</h3>
+<p>Barcelona vs Arsenal - Tonight 20:00</p>
+</div>
+</div>
 
-        alert("Login success: " + currentUser.username);
+<!-- STORE -->
+<div id="store" class="section">
+<h2>Store</h2>
 
-      } catch (err) {
-        console.error("Login error:", err);
-        alert("Login failed");
-      }
-    }
+<div class="card">
+<h3>Fantasy Draft Pack</h3>
+<p>1 Test Pi</p>
+<button onclick="buyItem('Fantasy Draft Pack',1)">Buy</button>
+</div>
 
-    // PAYMENT
-    async function pay() {
-      if (!currentUser) {
-        alert("Banza ukore Login with Pi");
-        return;
-      }
+<div class="card">
+<h3>VIP Club Pass</h3>
+<p>2 Test Pi</p>
+<button onclick="buyItem('VIP Club Pass',2)">Buy</button>
+</div>
 
-      try {
-        await Pi.createPayment(
-          {
-            amount: 1,
-            memo: "Test payment",
-            metadata: {
-              item: "test"
-            }
-          },
-          {
-            onReadyForServerApproval: async function(paymentId) {
-              alert("Approval started");
+<div class="card">
+<h3>Match Predictor Pro</h3>
+<p>1 Test Pi</p>
+<button onclick="buyItem('Match Predictor Pro',1)">Buy</button>
+</div>
+</div>
 
-              const res = await fetch(
-                backendURL + "/approve-payment",
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json"
-                  },
-                  body: JSON.stringify({ paymentId })
-                }
-              );
+<!-- FIXTURES -->
+<div id="fixtures" class="section">
+<h2>Fixtures</h2>
 
-              alert("Approval status: " + res.status);
-            },
+<div class="card">
+<p>Real Madrid vs Chelsea</p>
+</div>
 
-            onReadyForServerCompletion: async function(paymentId, txid) {
-              const res = await fetch(
-                backendURL + "/complete-payment",
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json"
-                  },
-                  body: JSON.stringify({
-                    paymentId,
-                    txid
-                  })
-                }
-              );
+<div class="card">
+<p>Man City vs PSG</p>
+</div>
 
-              alert("Completion status: " + res.status);
-            },
+<div class="card">
+<p>Liverpool vs Bayern</p>
+</div>
+</div>
 
-            onCancel: function() {
-              alert("Cancelled");
-            },
+<!-- GAMES -->
+<div id="games" class="section">
+<h2>Games</h2>
 
-            onError: function(error) {
-              console.error("Payment error:", error);
-              alert("Payment error");
-            }
-          }
-        );
+<div class="card">
+<p>Penalty Challenge</p>
+<button>Play</button>
+</div>
 
-      } catch (e) {
-        console.error("Create payment error:", e);
-        alert("Create payment failed");
-      }
-    }
-  </script>
+<div class="card">
+<p>Free Kick Master</p>
+<button>Play</button>
+</div>
+</div>
+
+<!-- PROFILE -->
+<div id="profile" class="section">
+<h2>Profile</h2>
+
+<div class="card">
+<p>User: <span id="username">Guest</span></p>
+<button onclick="loginPi()">Login with Pi</button>
+</div>
+</div>
+
+<!-- NAV -->
+<nav>
+<button onclick="openTab('home')">Home</button>
+<button onclick="openTab('store')">Store</button>
+<button onclick="openTab('fixtures')">Fixtures</button>
+<button onclick="openTab('games')">Games</button>
+<button onclick="openTab('profile')">Profile</button>
+</nav>
+
+<script>
+Pi.init({ version:"2.0", sandbox:true });
+
+const backendURL="https://pi-server-3pra.onrender.com";
+let currentUser=null;
+
+// tabs
+function openTab(id){
+document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+}
+
+// login
+async function loginPi(){
+try{
+const scopes=["username","payments"];
+const auth=await Pi.authenticate(scopes);
+currentUser=auth.user;
+document.getElementById("username").innerText=currentUser.username;
+alert("Login success");
+}catch(e){
+alert("Login failed");
+}
+}
+
+// buy
+async function buyItem(name,amount){
+
+if(!currentUser){
+alert("Login first");
+openTab("profile");
+return;
+}
+
+try{
+await Pi.createPayment(
+{
+amount:amount,
+memo:name,
+metadata:{item:name}
+},
+{
+onReadyForServerApproval: async function(paymentId){
+await fetch(backendURL+"/approve-payment",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({paymentId})
+});
+},
+
+onReadyForServerCompletion: async function(paymentId,txid){
+await fetch(backendURL+"/complete-payment",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({paymentId,txid})
+});
+alert(name+" purchased successfully!");
+},
+
+onCancel:function(){
+alert("Payment cancelled");
+},
+
+onError:function(err){
+console.log(err);
+alert("Payment error");
+}
+}
+);
+}catch(e){
+alert("Payment failed");
+}
+}
+</script>
+
 </body>
 </html>
