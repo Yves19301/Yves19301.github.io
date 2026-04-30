@@ -2,56 +2,372 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="refresh" content="0; url=https://yves19301.github.io/socker.html">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>SOCKER APP</title>
-
-<script>
-window.location.replace("https://yves19301.github.io/socker.html");
-</script>
+<script src="https://sdk.minepi.com/pi-sdk.js"></script>
 
 <style>
-body{
+*{
 margin:0;
 padding:0;
-background:#000;
-color:#fff;
-font-family:Arial,sans-serif;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:linear-gradient(180deg,#05070d,#09111f,#0c1528,#071018);
+color:white;
+padding-bottom:90px;
+}
+
+header{
+padding:18px;
 display:flex;
-justify-content:center;
+justify-content:space-between;
 align-items:center;
-height:100vh;
+background:rgba(0,0,0,0.35);
+backdrop-filter:blur(8px);
+border-bottom:1px solid rgba(255,255,255,.06);
+position:sticky;
+top:0;
+z-index:100;
 }
-.box{
-text-align:center;
+
+.logo{
+font-size:32px;
+font-weight:bold;
+color:#fff;
 }
-.loader{
-width:55px;
-height:55px;
-border:5px solid #222;
-border-top:5px solid #22c55e;
-border-radius:50%;
-margin:auto;
-animation:spin 1s linear infinite;
+
+.badge{
+background:#111827;
+padding:8px 16px;
+border-radius:30px;
+color:#aaa;
+font-weight:bold;
+font-size:14px;
 }
-@keyframes spin{
-100%{transform:rotate(360deg);}
+
+.wrap{
+padding:16px;
 }
-h1{
-margin-top:18px;
+
+.card{
+background:linear-gradient(180deg,rgba(20,25,40,.95),rgba(10,14,24,.95));
+border:1px solid rgba(255,255,255,.05);
+border-radius:24px;
+padding:18px;
+margin-bottom:18px;
+box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+
+.title{
+font-size:28px;
+font-weight:bold;
+margin-bottom:15px;
 color:#22c55e;
 }
-p{
-color:#aaa;
+
+.sub{
+color:#9ca3af;
+margin-top:6px;
+font-size:15px;
+}
+
+.section{
+display:none;
+}
+
+.section.active{
+display:block;
+}
+
+.row{
+display:flex;
+gap:12px;
+}
+
+.col{
+flex:1;
+}
+
+.small{
+font-size:14px;
+color:#9ca3af;
+}
+
+.big{
+font-size:24px;
+font-weight:bold;
+margin-top:6px;
+}
+
+.btn{
+width:100%;
+padding:14px;
+border:none;
+border-radius:16px;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+margin-top:14px;
+}
+
+.green{
+background:#22c55e;
+color:white;
+}
+
+.gold{
+background:#f59e0b;
+color:black;
+}
+
+.blue{
+background:#3b82f6;
+color:white;
+}
+
+.red{
+background:#ef4444;
+color:white;
+}
+
+.item{
+padding:14px;
+border-radius:18px;
+background:rgba(255,255,255,.03);
+margin-top:12px;
+}
+
+.price{
+color:#fbbf24;
+font-weight:bold;
+margin-top:8px;
+}
+
+.nav{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:#070b14;
+border-top:1px solid rgba(255,255,255,.06);
+display:flex;
+justify-content:space-around;
+padding:12px 4px;
+z-index:999;
+}
+
+.nav button{
+background:none;
+border:none;
+color:#9ca3af;
+font-size:15px;
+cursor:pointer;
+}
+
+.nav button.active{
+color:#22c55e;
+font-weight:bold;
+}
+
+.status{
+margin-top:10px;
+font-size:15px;
+color:#22c55e;
 }
 </style>
 </head>
 
 <body>
-<div class="box">
-<div class="loader"></div>
-<h1>SOCKER APP</h1>
-<p>Loading...</p>
+
+<header>
+<div class="logo">⚽ SOCKER</div>
+<div class="badge">BUILD</div>
+</header>
+
+<div class="wrap">
+
+<!-- HOME -->
+<div id="home" class="section active">
+<div class="card">
+<div class="title">Home</div>
+<div class="big">Welcome Back</div>
+<div class="sub">Train, play and unlock premium football tools.</div>
 </div>
+
+<div class="card">
+<div class="big">🔥 Featured Bundle</div>
+<div class="sub">Technical Skills Bundle</div>
+<div class="price">0.0000796 Pi</div>
+<button class="btn green" onclick="pay('Technical Skills Bundle',0.0000796)">Buy Now</button>
+</div>
+
+<div class="card">
+<div class="big">⚽ Live Match</div>
+<div class="sub">Barcelona vs Arsenal</div>
+<div class="price">Tonight 20:00</div>
+</div>
+</div>
+
+<!-- STORE -->
+<div id="store" class="section">
+
+<div class="card">
+<div class="title">Training Lessons</div>
+
+<div class="item">
+Dribbling Masterclass
+<div class="price">0.0000318 Pi</div>
+<button class="btn gold" onclick="pay('Dribbling Lesson',0.0000318)">Buy Lesson</button>
+</div>
+
+<div class="item">
+Finishing Like Pro
+<div class="price">0.0000318 Pi</div>
+<button class="btn gold" onclick="pay('Finishing Lesson',0.0000318)">Buy Lesson</button>
+</div>
+
+<div class="item">
+Passing Vision Pack
+<div class="price">0.0000318 Pi</div>
+<button class="btn gold" onclick="pay('Passing Pack',0.0000318)">Buy Lesson</button>
+</div>
+
+<div class="item">
+Technical Skills Bundle (5 lessons)
+<div class="price">0.0000796 Pi</div>
+<button class="btn green" onclick="pay('Technical Bundle',0.0000796)">Buy Bundle</button>
+</div>
+
+</div>
+</div>
+
+<!-- FIXTURES -->
+<div id="fixtures" class="section">
+<div class="card">
+<div class="title">Fixtures</div>
+
+<div class="item">Manchester Utd vs Liverpool</div>
+<div class="item">PSG vs Monaco</div>
+<div class="item">Real Madrid vs Barcelona</div>
+<div class="item">Chelsea vs Juventus</div>
+
+</div>
+</div>
+
+<!-- GAMES -->
+<div id="games" class="section">
+<div class="card">
+<div class="title">Games</div>
+
+<div class="item">
+Trivia Entry
+<div class="price">0.0000320 Pi</div>
+<button class="btn blue" onclick="pay('Trivia Game',0.0000320)">Play</button>
+</div>
+
+<div class="item">
+Penalty Challenge
+<div class="price">0.0000400 Pi</div>
+<button class="btn blue" onclick="pay('Penalty Game',0.0000400)">Play</button>
+</div>
+
+</div>
+</div>
+
+<!-- PROFILE -->
+<div id="profile" class="section">
+<div class="card">
+<div class="title">Profile</div>
+
+<div class="row">
+<div class="col">
+<div class="small">Player</div>
+<div class="big">@pioneer</div>
+</div>
+
+<div class="col">
+<div class="small">Balance</div>
+<div class="big">1000 Pi</div>
+</div>
+</div>
+
+<div class="status" id="status">Wallet ready</div>
+
+</div>
+</div>
+
+</div>
+
+<!-- NAV -->
+<div class="nav">
+<button onclick="openTab('home',this)" class="active">Home</button>
+<button onclick="openTab('store',this)">Store</button>
+<button onclick="openTab('fixtures',this)">Fixtures</button>
+<button onclick="openTab('games',this)">Games</button>
+<button onclick="openTab('profile',this)">Profile</button>
+</div>
+
+<script>
+const backendURL="https://pi-server-3pra.onrender.com";
+
+Pi.init({version:"2.0",sandbox:true});
+
+function openTab(id,el){
+document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+
+document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+el.classList.add("active");
+}
+
+async function pay(product,amount){
+
+try{
+document.getElementById("status").innerText="Starting payment...";
+
+await Pi.createPayment({
+amount:amount,
+memo:product,
+metadata:{item:product}
+},{
+onReadyForServerApproval: async function(paymentId){
+document.getElementById("status").innerText="Approving...";
+await fetch(backendURL+"/approve-payment",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({paymentId})
+});
+},
+
+onReadyForServerCompletion: async function(paymentId,txid){
+document.getElementById("status").innerText="Completing...";
+await fetch(backendURL+"/complete-payment",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({paymentId,txid})
+});
+},
+
+onCancel:function(){
+document.getElementById("status").innerText="Payment cancelled";
+},
+
+onError:function(error){
+document.getElementById("status").innerText="Payment failed";
+console.log(error);
+}
+});
+
+document.getElementById("status").innerText="Payment success ✅";
+
+}catch(e){
+document.getElementById("status").innerText="Error payment";
+}
+}
+</script>
+
 </body>
 </html>
