@@ -1,28 +1,168 @@
 <!DOCTYPE html>
-<h
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SOCKER BUILD</title>
+<script src="https://sdk.minepi.com/pi-sdk.js"></script>
+
+<style>
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#0f1115;
+color:white;
+}
+header{
+padding:15px;
+font-size:28px;
+font-weight:bold;
+background:#111;
+}
+.logo{color:#22c55e;}
+.top{color:#fff;}
+.section{
 padding:18px;
+}
+.card{
+background:#1a1d24;
+padding:18px;
+margin-bottom:15px;
+border-radius:14px;
+}
+button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+background:#22c55e;
+color:white;
+font-size:18px;
+font-weight:bold;
+margin-top:10px;
+}
+nav{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:#111;
 display:flex;
-justify-content:space-between;
-align-items:cen
+justify-content:space-around;
+padding:12px;
+}
+nav div{
+color:white;
+font-size:18px;
+}
+#status{
+margin-top:10px;
+color:#22c55e;
+font-weight:bold;
+}
+</style>
+</head>
 
 <body>
 
-<header>
-<div class="logo">⚽ SOCKER</div>
-<div class="badge">BUILD</div>
-</header>
+<header><span class="logo">⚽ SOCKER</span> BUILD</header>
 
-<div class="wrap">
+<div class="section">
 
-<!-- HOME -->
+<div class="card">
+<h2>Welcome Back</h2>
+<p>Train, play and unlock premium football tools.</p>
+</div>
 
+<div class="card">
+<h2>Training Lessons Bundle</h2>
+<p>Dribbling • Finishing • Crossing • Tactics</p>
+<p><b>0.05 Pi</b></p>
+<button onclick="pay()">Buy with Pi</button>
+<div id="status"></div>
+</div>
+
+<div class="card">
+<h2>Bet Wise Prediction</h2>
+<p>Daily smart picks + analysis</p>
+<p><b>0.03 Pi</b></p>
+<button onclick="pay()">Buy with Pi</button>
+</div>
+
+<div class="card">
+<h2>Latest Match</h2>
+<p>Barcelona vs Arsenal - Tonight 20:00</p>
 </div>
 
 </div>
 
-<!-- NAV -->
-("status").innerText="Error payment";
+<nav>
+<div>Home</div>
+<div>Store</div>
+<div>Fixtures</div>
+<div>Games</div>
+<div>Profile</div>
+</nav>
+
+<script>
+Pi.init({ version:"2.0", sandbox:true });
+
+const backendURL = "https://pi-server-3pra.onrender.com";
+
+async function pay(){
+
+document.getElementById("status").innerText="Opening payment...";
+
+try{
+
+await Pi.createPayment(
+{
+amount:0.01,
+memo:"SOCKER Purchase",
+metadata:{ item:"lesson" }
+},
+{
+onReadyForServerApproval: async function(paymentId){
+
+document.getElementById("status").innerText="Approving...";
+
+await fetch(backendURL + "/approve-payment",{
+method:"POST",
+headers:{ "Content-Type":"application/json" },
+body:JSON.stringify({ paymentId })
+});
+
+},
+
+onReadyForServerCompletion: async function(paymentId, txid){
+
+document.getElementById("status").innerText="Completing...";
+
+await fetch(backendURL + "/complete-payment",{
+method:"POST",
+headers:{ "Content-Type":"application/json" },
+body:JSON.stringify({ paymentId, txid })
+});
+
+document.getElementById("status").innerText="Payment Success ✅";
+
+},
+
+onCancel:function(){
+document.getElementById("status").innerText="Payment Cancelled";
+},
+
+onError:function(error){
+document.getElementById("status").innerText="Error payment";
+console.log(error);
 }
+}
+);
+
+}catch(e){
+document.getElementById("status").innerText="Failed";
+}
+
 }
 </script>
 
