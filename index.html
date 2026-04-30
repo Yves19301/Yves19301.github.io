@@ -2,167 +2,248 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>SOCKER BUILD</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOCKER</title>
+
 <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 
 <style>
-body{
+*{
 margin:0;
-font-family:Arial,sans-serif;
-background:#0f1115;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:#0b0b0b;
 color:white;
+padding-bottom:90px;
 }
+
 header{
-padding:15px;
-font-size:28px;
+padding:20px;
+font-size:32px;
 font-weight:bold;
-background:#111;
+text-align:center;
+color:#22c55e;
+border-bottom:1px solid #222;
 }
-.logo{color:#22c55e;}
-.top{color:#fff;}
-.section{
+
+.page{
+display:none;
 padding:18px;
 }
+
+.page.active{
+display:block;
+}
+
 .card{
-background:#1a1d24;
+background:#141822;
 padding:18px;
-margin-bottom:15px;
-border-radius:14px;
+border-radius:18px;
+margin-bottom:18px;
 }
+
+h2{
+margin-bottom:12px;
+}
+
+p{
+color:#d1d5db;
+line-height:1.5;
+}
+
+.price{
+font-size:24px;
+font-weight:bold;
+margin:12px 0;
+color:#22c55e;
+}
+
 button{
 width:100%;
-padding:14px;
+padding:15px;
 border:none;
-border-radius:12px;
-background:#22c55e;
-color:white;
+border-radius:14px;
 font-size:18px;
 font-weight:bold;
+background:#22c55e;
+color:white;
 margin-top:10px;
 }
-nav{
+
+button:active{
+transform:scale(.98);
+}
+
+.nav{
 position:fixed;
 bottom:0;
 left:0;
 right:0;
+height:70px;
 background:#111;
 display:flex;
 justify-content:space-around;
-padding:12px;
+align-items:center;
+border-top:1px solid #222;
 }
-nav div{
+
+.nav button{
+background:none;
 color:white;
-font-size:18px;
+font-size:16px;
+width:auto;
+padding:0;
+margin:0;
 }
-#status{
-margin-top:10px;
+
+.nav button.active{
 color:#22c55e;
 font-weight:bold;
+}
+
+.small{
+font-size:14px;
+margin-top:10px;
+color:#9ca3af;
 }
 </style>
 </head>
 
 <body>
 
-<header><span class="logo">⚽ SOCKER</span> BUILD</header>
+<header>⚽ SOCKER</header>
 
-<div class="section">
-
+<!-- HOME -->
+<div class="page active" id="home">
 <div class="card">
 <h2>Welcome Back</h2>
 <p>Train, play and unlock premium football tools.</p>
 </div>
 
 <div class="card">
+<h2>Top Features</h2>
+<p>• Training Lessons<br>
+• Bet Wise Prediction<br>
+• Live Fixtures<br>
+• Football Games</p>
+</div>
+</div>
+
+<!-- STORE -->
+<div class="page" id="store">
+
+<div class="card">
 <h2>Training Lessons Bundle</h2>
 <p>Dribbling • Finishing • Crossing • Tactics</p>
-<p><b>0.05 Pi</b></p>
-<button onclick="pay()">Buy with Pi</button>
-<div id="status"></div>
+<div class="price">0.05 Pi</div>
+<button onclick="pay('Training Lessons',0.05)">Buy with Pi</button>
+<div class="small">Price based on GVC low-access package.</div>
+</div>
+
+<div class="card">
+<h2>Advanced Pro Lessons</h2>
+<p>Elite moves • Positioning • Match IQ</p>
+<div class="price">0.10 Pi</div>
+<button onclick="pay('Advanced Lessons',0.10)">Buy with Pi</button>
 </div>
 
 <div class="card">
 <h2>Bet Wise Prediction</h2>
 <p>Daily smart picks + analysis</p>
-<p><b>0.03 Pi</b></p>
-<button onclick="pay()">Buy with Pi</button>
+<div class="price">0.03 Pi</div>
+<button onclick="pay('Bet Wise',0.03)">Buy with Pi</button>
 </div>
 
+</div>
+
+<!-- FIXTURES -->
+<div class="page" id="fixtures">
 <div class="card">
-<h2>Latest Match</h2>
-<p>Barcelona vs Arsenal - Tonight 20:00</p>
+<h2>Today's Fixtures</h2>
+<p>
+Arsenal vs Chelsea<br><br>
+Real Madrid vs Sevilla<br><br>
+Inter vs Milan
+</p>
+</div>
 </div>
 
+<!-- GAMES -->
+<div class="page" id="games">
+<div class="card">
+<h2>Mini Football Games</h2>
+<p>
+Penalty Challenge<br><br>
+Reaction Speed Tap<br><br>
+Guess The Score
+</p>
+</div>
 </div>
 
-<nav>
-<div>Home</div>
-<div>Store</div>
-<div>Fixtures</div>
-<div>Games</div>
-<div>Profile</div>
-</nav>
+<!-- PROFILE -->
+<div class="page" id="profile">
+<div class="card">
+<h2>Your Profile</h2>
+<p>User: Pi Pioneer<br>
+Membership: Free<br>
+Purchases: 0</p>
+<button onclick="loginPi()">Login With Pi</button>
+</div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+<button class="active" onclick="openTab('home',this)">Home</button>
+<button onclick="openTab('store',this)">Store</button>
+<button onclick="openTab('fixtures',this)">Fixtures</button>
+<button onclick="openTab('games',this)">Games</button>
+<button onclick="openTab('profile',this)">Profile</button>
+</div>
 
 <script>
 Pi.init({ version:"2.0", sandbox:true });
 
-const backendURL = "https://pi-server-3pra.onrender.com";
+function openTab(id,btn){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById(id).classList.add("active");
 
-async function pay(){
+document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+btn.classList.add("active");
+}
 
-document.getElementById("status").innerText="Opening payment...";
-
+async function loginPi(){
 try{
-
-await Pi.createPayment(
-{
-amount:0.01,
-memo:"SOCKER Purchase",
-metadata:{ item:"lesson" }
-},
-{
-onReadyForServerApproval: async function(paymentId){
-
-document.getElementById("status").innerText="Approving...";
-
-await fetch(backendURL + "/approve-payment",{
-method:"POST",
-headers:{ "Content-Type":"application/json" },
-body:JSON.stringify({ paymentId })
-});
-
-},
-
-onReadyForServerCompletion: async function(paymentId, txid){
-
-document.getElementById("status").innerText="Completing...";
-
-await fetch(backendURL + "/complete-payment",{
-method:"POST",
-headers:{ "Content-Type":"application/json" },
-body:JSON.stringify({ paymentId, txid })
-});
-
-document.getElementById("status").innerText="Payment Success ✅";
-
-},
-
-onCancel:function(){
-document.getElementById("status").innerText="Payment Cancelled";
-},
-
-onError:function(error){
-document.getElementById("status").innerText="Error payment";
-console.log(error);
-}
-}
-);
-
+const scopes=['username','payments'];
+const auth=await Pi.authenticate(scopes,function(){});
+alert("Welcome "+auth.user.username);
 }catch(e){
-document.getElementById("status").innerText="Failed";
+alert("Login cancelled");
+}
 }
 
+async function pay(item,amount){
+try{
+await Pi.createPayment({
+amount:amount,
+memo:item,
+metadata:{type:item}
+},{
+onReadyForServerApproval:function(paymentId){},
+onReadyForServerCompletion:function(paymentId,txid){},
+onCancel:function(paymentId){
+alert("Payment cancelled");
+},
+onError:function(error){
+alert("Payment failed");
+}
+});
+}catch(e){
+alert("Payment error");
+}
 }
 </script>
 
