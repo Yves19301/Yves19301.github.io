@@ -3,179 +3,67 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Socker Premium</title>
+<title>Socker V3</title>
 <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{
-font-family:Arial,Helvetica,sans-serif;
-background:#050b16;
-color:#fff;
-padding-bottom:90px;
-}
-header{
-background:#0c1220;
-padding:18px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-font-size:28px;
-font-weight:bold;
-color:#00ff99;
-position:sticky;
-top:0;
-z-index:10;
-}
-#backBtn{
-background:#00ff99;
-border:none;
-padding:10px 14px;
-border-radius:10px;
-font-weight:bold;
-cursor:pointer;
-}
-.page{display:none;padding:15px;}
-.page.active{display:block;}
-
-.scroll-tabs{
-display:flex;
-overflow-x:auto;
-gap:10px;
-padding:10px 0;
-}
-.scroll-tabs button{
-min-width:150px;
-border:none;
-padding:14px;
-border-radius:30px;
-background:#111a2a;
-color:#fff;
-font-weight:bold;
-}
-.scroll-tabs button.active{
-background:#00ff99;
-color:#000;
-}
-
-.card{
-background:#101826;
-padding:15px;
-border-radius:18px;
-margin:12px 0;
-box-shadow:0 0 8px rgba(0,0,0,.4);
-}
-.big{
-font-size:32px;
-font-weight:bold;
-}
-.green{color:#00ff99}
-.red{color:#ff5252}
-
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
-}
-.small-btn,.buy{
-background:#00ff99;
-border:none;
-padding:12px;
-border-radius:12px;
-font-weight:bold;
-cursor:pointer;
-width:100%;
-}
-
-.bottom{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-background:#0c1220;
-display:flex;
-justify-content:space-around;
-padding:12px 5px;
-border-top:1px solid #1e2a40;
-}
-.bottom button{
-background:none;
-border:none;
-color:#fff;
-font-size:14px;
-font-weight:bold;
-cursor:pointer;
-}
-
-input{
-width:100%;
-padding:12px;
-border:none;
-border-radius:10px;
-margin:8px 0;
-}
+body{font-family:Arial,sans-serif;background:#08111f;color:#fff;padding-bottom:80px}
+header{background:#0d1628;padding:16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0}
+.logo{font-size:28px;font-weight:bold;color:#00ff99}
+button{cursor:pointer}
+.back{background:#00ff99;border:none;padding:10px 14px;border-radius:10px;font-weight:bold}
+.page{display:none;padding:15px}
+.active{display:block}
+.card{background:#101b30;padding:15px;border-radius:18px;margin:12px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.green{background:#00ff99;color:#000;border:none;padding:12px;border-radius:12px;font-weight:bold;width:100%}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#0d1628;display:flex;justify-content:space-around;padding:12px}
+.nav button{background:none;border:none;color:#fff;font-weight:bold}
+.tabs{display:flex;gap:10px;overflow:auto;margin-bottom:10px}
+.tabs button{min-width:140px;background:#16243f;color:#fff;border:none;padding:12px;border-radius:22px}
+.tabs button.on{background:#00ff99;color:#000}
+h1,h2,h3{margin-bottom:8px}
+.small{font-size:14px;color:#ccc}
 </style>
 </head>
-
 <body>
 
 <header>
-<span>⚽ SOCKER</span>
-<button id="backBtn" onclick="goBack()">⬅ Back</button>
+<div class="logo">⚽ SOCKER</div>
+<button class="back" onclick="goBack()">⬅ Back</button>
 </header>
 
 <!-- HOME -->
 <section id="home" class="page active">
+<div class="tabs">
+<button class="on" onclick="league('pl')">Premier League</button>
+<button onclick="league('laliga')">La Liga</button>
+<button onclick="league('bundes')">Bundesliga</button>
+<button onclick="league('seriea')">Serie A</button>
+</div>
 
-<div class="scroll-tabs">
-<button class="active">Premier League</button>
-<button>La Liga</button>
-<button>Bundesliga</button>
-<button>Serie A</button>
-<button>Ligue 1</button>
+<div id="leagueBox"></div>
+
+<div class="card">
+<h3>🔥 Free Today</h3>
+<p>2 Lessons unlocked for everyone.</p>
 </div>
 
 <div class="card">
-<h2 class="red">🔴 LIVE NOW</h2>
+<h3>💰 VIP Pi Access</h3>
+<p>Unlock premium academy & sure predictions.</p>
+<button class="green" onclick="openPage('store')">Go VIP</button>
 </div>
-
-<div class="card">
-<p>Premier League • 78'</p>
-<h2>Manchester City <span class="big">2 : 1</span> Liverpool</h2>
-<p class="green">Etihad Stadium</p>
-</div>
-
-<div class="card">
-<p>La Liga • 45+2'</p>
-<h2>Barcelona <span class="big">1 : 1</span> Real Madrid</h2>
-<p class="green">Camp Nou</p>
-</div>
-
-<div class="card">
-<p>Bundesliga • FT</p>
-<h2>Bayern <span class="big">3 : 0</span> Dortmund</h2>
-</div>
-
 </section>
 
 <!-- FIXTURES -->
 <section id="fixtures" class="page">
-<h2>Fixtures</h2>
+<h2>Upcoming Fixtures</h2>
 
-<div class="card">
-<p>Tomorrow</p>
-<h3>Arsenal vs Chelsea</h3>
-</div>
-
-<div class="card">
-<p>Tomorrow</p>
-<h3>Juventus vs Milan</h3>
-</div>
-
-<div class="card">
-<p>Sunday</p>
-<h3>PSG vs Marseille</h3>
-</div>
+<div class="card">Arsenal vs Chelsea</div>
+<div class="card">Barcelona vs Sevilla</div>
+<div class="card">Bayern vs Leipzig</div>
+<div class="card">Juventus vs Milan</div>
 </section>
 
 <!-- CLUB -->
@@ -186,58 +74,85 @@ margin:8px 0;
 
 <div class="card">
 <h3>Lessons</h3>
-<p>Passing, dribbling, finishing.</p>
-<button class="small-btn">Open</button>
+<p class="small">Passing, dribbling, finishing.</p>
+<button class="green" onclick="openPage('lessons')">Open</button>
 </div>
 
 <div class="card">
 <h3>Tactics</h3>
-<p>4-3-3, 4-4-2, pressing.</p>
-<button class="small-btn">Open</button>
+<p class="small">4-3-3 / 4-4-2</p>
+<button class="green" onclick="openPage('tactics')">Open</button>
 </div>
 
 <div class="card">
 <h3>Training</h3>
-<p>Daily drills to improve.</p>
-<button class="small-btn">Open</button>
+<p class="small">Daily drills</p>
+<button class="green" onclick="openPage('training')">Open</button>
 </div>
 
 <div class="card">
 <h3>Discover</h3>
-<p>Find hidden football talent.</p>
-<button class="small-btn">Open</button>
+<p class="small">Find talents</p>
+<button class="green" onclick="openPage('discover')">Open</button>
 </div>
 
 </div>
+</section>
 
-<div class="card">
-<h3>Build Your Career</h3>
-<p>Grow from academy to legend.</p>
-<button class="small-btn">Start</button>
-</div>
+<!-- LESSONS -->
+<section id="lessons" class="page">
+<h2>Football Lessons</h2>
+<div class="card">1. Passing mastery</div>
+<div class="card">2. Ball control</div>
+<div class="card">3. Finishing like striker</div>
+<div class="card">🔒 Advanced Lesson (2 Pi)</div>
+<button class="green" onclick="pay(2,'Advanced Lesson Unlock')">Unlock in Pi</button>
+</section>
 
+<!-- TACTICS -->
+<section id="tactics" class="page">
+<h2>Tactics Board</h2>
+<div class="card">4-3-3 High Press</div>
+<div class="card">4-4-2 Counter Attack</div>
+<div class="card">3-5-2 Possession</div>
+</section>
+
+<!-- TRAINING -->
+<section id="training" class="page">
+<h2>Training Drills</h2>
+<div class="card">Cone dribbling - 10 mins</div>
+<div class="card">Passing wall - 50 reps</div>
+<div class="card">Sprint + shot combo</div>
+</section>
+
+<!-- DISCOVER -->
+<section id="discover" class="page">
+<h2>Discover Talent</h2>
+<div class="card">Speed Rating Test</div>
+<div class="card">Vision Rating Test</div>
+<div class="card">Finishing Rating Test</div>
 </section>
 
 <!-- STORE -->
 <section id="store" class="page">
-<h2>VIP Store</h2>
+<h2>Pi Monetisation Store</h2>
 
 <div class="card">
-<h3>1 Day VIP</h3>
+<h3>VIP Day Pass</h3>
 <p>5 Pi</p>
-<button class="buy" onclick="pay(5,'1 Day VIP')">Buy</button>
+<button class="green" onclick="pay(5,'VIP Day Pass')">Buy</button>
 </div>
 
 <div class="card">
-<h3>1 Week VIP</h3>
-<p>20 Pi</p>
-<button class="buy" onclick="pay(20,'1 Week VIP')">Buy</button>
+<h3>Monthly VIP</h3>
+<p>30 Pi</p>
+<button class="green" onclick="pay(30,'Monthly VIP')">Buy</button>
 </div>
 
 <div class="card">
-<h3>1 Month VIP</h3>
-<p>50 Pi</p>
-<button class="buy" onclick="pay(50,'1 Month VIP')">Buy</button>
+<h3>Prediction Pack</h3>
+<p>3 Pi</p>
+<button class="green" onclick="pay(3,'Prediction Pack')">Buy</button>
 </div>
 
 </section>
@@ -245,16 +160,14 @@ margin:8px 0;
 <!-- PROFILE -->
 <section id="profile" class="page">
 <h2>Profile</h2>
-
 <div class="card">
-<button class="buy" onclick="login()">Login with Pi</button>
+<button class="green" onclick="login()">Login with Pi</button>
 <p id="status"></p>
 </div>
-
 </section>
 
-<!-- BOTTOM NAV -->
-<div class="bottom">
+<!-- NAV -->
+<div class="nav">
 <button onclick="openPage('home')">HOME</button>
 <button onclick="openPage('fixtures')">FIXTURES</button>
 <button onclick="openPage('club')">CLUB</button>
@@ -265,46 +178,53 @@ margin:8px 0;
 <script>
 Pi.init({version:"2.0",sandbox:true});
 
-let historyStack=["home"];
+let stack=["home"];
 
 function openPage(id){
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
 document.getElementById(id).classList.add("active");
-
-if(historyStack[historyStack.length-1]!==id){
-historyStack.push(id);
-}
+if(stack[stack.length-1]!==id) stack.push(id);
 }
 
 function goBack(){
-if(historyStack.length>1){
-historyStack.pop();
-let last=historyStack[historyStack.length-1];
-openPage(last);
-historyStack.pop();
+if(stack.length>1){
+stack.pop();
+let prev=stack[stack.length-1];
+document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+document.getElementById(prev).classList.add("active");
 }
 }
 
+function league(name){
+let box=document.getElementById("leagueBox");
+if(name=="pl"){
+box.innerHTML=`<div class="card"><h3>Premier League Live</h3><p>Man City 2 - 1 Liverpool</p></div>`;
+}
+if(name=="laliga"){
+box.innerHTML=`<div class="card"><h3>La Liga Live</h3><p>Barcelona 1 - 1 Real Madrid</p></div>`;
+}
+if(name=="bundes"){
+box.innerHTML=`<div class="card"><h3>Bundesliga</h3><p>Bayern 3 - 0 Dortmund</p></div>`;
+}
+if(name=="seriea"){
+box.innerHTML=`<div class="card"><h3>Serie A</h3><p>Juventus 2 - 0 Milan</p></div>`;
+}
+}
+league("pl");
+
 async function login(){
 try{
-const scopes=['username','payments'];
-const auth=await Pi.authenticate(scopes,function(){});
+const auth=await Pi.authenticate(['username','payments'],function(){});
 document.getElementById("status").innerHTML="Logged in as "+auth.user.username;
 }catch(e){
 document.getElementById("status").innerHTML="Login failed";
 }
 }
 
-async function pay(amount,memo){
-try{
-const paymentData={
-amount:amount,
-memo:memo,
-metadata:{app:"Socker"}
-};
+function pay(amount,memo){
+const data={amount:amount,memo:memo,metadata:{app:"Socker"}};
 
-const callbacks={
-
+Pi.createPayment(data,{
 onReadyForServerApproval:function(paymentId){
 fetch("https://pi-server-3pra.onrender.com/approve-payment",{
 method:"POST",
@@ -312,7 +232,6 @@ headers:{"Content-Type":"application/json"},
 body:JSON.stringify({paymentId})
 });
 },
-
 onReadyForServerCompletion:function(paymentId,txid){
 fetch("https://pi-server-3pra.onrender.com/complete-payment",{
 method:"POST",
@@ -320,16 +239,9 @@ headers:{"Content-Type":"application/json"},
 body:JSON.stringify({paymentId,txid})
 });
 },
-
 onCancel:function(){alert("Payment canceled");},
 onError:function(){alert("Payment error");}
-};
-
-Pi.createPayment(paymentData,callbacks);
-
-}catch(err){
-alert("Payment failed");
-}
+});
 }
 </script>
 
