@@ -2,247 +2,253 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOCKER</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Socker</title>
 <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
-}
-
 body{
-background:#0b0b0b;
+margin:0;
+font-family:Arial,Helvetica,sans-serif;
+background:#0d1117;
 color:white;
-padding-bottom:90px;
-}
-
-header{
-padding:20px;
-font-size:32px;
-font-weight:bold;
 text-align:center;
-color:#22c55e;
-border-bottom:1px solid #222;
 }
-
-.page{
+header{
+background:#161b22;
+padding:15px;
+font-size:28px;
+font-weight:bold;
+color:#00ff99;
+}
+nav{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:8px;
+padding:10px;
+background:#111;
+}
+nav button{
+padding:10px 15px;
+border:none;
+border-radius:8px;
+background:#00ff99;
+font-weight:bold;
+cursor:pointer;
+}
+section{
 display:none;
-padding:18px;
+padding:20px;
 }
-
-.page.active{
+section.active{
 display:block;
 }
-
 .card{
-background:#141822;
-padding:18px;
-border-radius:18px;
-margin-bottom:18px;
-}
-
-h2{
-margin-bottom:12px;
-}
-
-p{
-color:#d1d5db;
-line-height:1.5;
-}
-
-.price{
-font-size:24px;
-font-weight:bold;
-margin:12px 0;
-color:#22c55e;
-}
-
-button{
-width:100%;
+background:#161b22;
 padding:15px;
+margin:10px;
+border-radius:12px;
+}
+.buy{
+background:#00ff99;
 border:none;
-border-radius:14px;
-font-size:18px;
+padding:10px 20px;
+border-radius:8px;
 font-weight:bold;
-background:#22c55e;
-color:white;
-margin-top:10px;
+cursor:pointer;
 }
-
-button:active{
-transform:scale(.98);
-}
-
-.nav{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-height:70px;
-background:#111;
-display:flex;
-justify-content:space-around;
-align-items:center;
-border-top:1px solid #222;
-}
-
-.nav button{
-background:none;
-color:white;
-font-size:16px;
-width:auto;
-padding:0;
-margin:0;
-}
-
-.nav button.active{
-color:#22c55e;
+#status{
+margin-top:15px;
+color:#00ff99;
 font-weight:bold;
-}
-
-.small{
-font-size:14px;
-margin-top:10px;
-color:#9ca3af;
 }
 </style>
 </head>
-
 <body>
 
 <header>⚽ SOCKER</header>
 
+<nav>
+<button onclick="openTab('home')">Home</button>
+<button onclick="openTab('lessons')">Lessons</button>
+<button onclick="openTab('tactics')">Tactics</button>
+<button onclick="openTab('predictions')">Predictions</button>
+<button onclick="openTab('store')">Store</button>
+<button onclick="openTab('account')">Account</button>
+</nav>
+
 <!-- HOME -->
-<div class="page active" id="home">
+<section id="home" class="active">
+<h2>Welcome to Socker</h2>
+<p>The premium football learning app powered by Pi.</p>
+</section>
+
+<!-- LESSONS -->
+<section id="lessons">
+<h2>Football Lessons</h2>
+
 <div class="card">
-<h2>Welcome Back</h2>
-<p>Train, play and unlock premium football tools.</p>
+<h3>1. Passing Mastery</h3>
+<p>Use inside foot for accuracy. Scan field before receiving ball.</p>
 </div>
 
 <div class="card">
-<h2>Top Features</h2>
-<p>• Training Lessons<br>
-• Bet Wise Prediction<br>
-• Live Fixtures<br>
-• Football Games</p>
+<h3>2. Dribbling Control</h3>
+<p>Keep ball close, use both feet, accelerate after skill move.</p>
 </div>
+
+<div class="card">
+<h3>3. Shooting Power</h3>
+<p>Plant non-kicking foot near ball. Strike center for power.</p>
 </div>
+
+<div class="card">
+<h3>4. Defending Basics</h3>
+<p>Stay low, delay attacker, tackle only at right moment.</p>
+</div>
+
+<div class="card">
+<h3>5. Positioning IQ</h3>
+<p>Move into space before ball arrives. Always check shoulders.</p>
+</div>
+</section>
+
+<!-- TACTICS -->
+<section id="tactics">
+<h2>Tactics</h2>
+
+<div class="card">
+<h3>4-3-3 Attack</h3>
+<p>Wide wingers + pressing front line.</p>
+</div>
+
+<div class="card">
+<h3>4-4-2 Balance</h3>
+<p>Compact defense + 2 strikers counter attack.</p>
+</div>
+
+<div class="card">
+<h3>3-5-2 Possession</h3>
+<p>Wingbacks provide width and midfield control.</p>
+</div>
+</section>
+
+<!-- PREDICTIONS -->
+<section id="predictions">
+<h2>Bet Wise Predictions</h2>
+
+<div class="card">
+<p>Over 1.5 Goals ★★★★☆</p>
+</div>
+
+<div class="card">
+<p>Home Win Double Chance ★★★★☆</p>
+</div>
+
+<div class="card">
+<p>BTTS Yes ★★★☆☆</p>
+</div>
+</section>
 
 <!-- STORE -->
-<div class="page" id="store">
+<section id="store">
+<h2>Premium Store</h2>
 
 <div class="card">
-<h2>Training Lessons Bundle</h2>
-<p>Dribbling • Finishing • Crossing • Tactics</p>
-<div class="price">0.05 Pi</div>
-<button onclick="pay('Training Lessons',0.05)">Buy with Pi</button>
-<div class="small">Price based on GVC low-access package.</div>
-</div>
-
-<div class="card">
-<h2>Advanced Pro Lessons</h2>
-<p>Elite moves • Positioning • Match IQ</p>
-<div class="price">0.10 Pi</div>
-<button onclick="pay('Advanced Lessons',0.10)">Buy with Pi</button>
+<h3>1 Day VIP</h3>
+<p>5 Pi</p>
+<button class="buy" onclick="pay(5,'1 Day VIP')">Buy</button>
 </div>
 
 <div class="card">
-<h2>Bet Wise Prediction</h2>
-<p>Daily smart picks + analysis</p>
-<div class="price">0.03 Pi</div>
-<button onclick="pay('Bet Wise',0.03)">Buy with Pi</button>
+<h3>1 Week VIP</h3>
+<p>20 Pi</p>
+<button class="buy" onclick="pay(20,'1 Week VIP')">Buy</button>
 </div>
 
-</div>
-
-<!-- FIXTURES -->
-<div class="page" id="fixtures">
 <div class="card">
-<h2>Today's Fixtures</h2>
-<p>
-Arsenal vs Chelsea<br><br>
-Real Madrid vs Sevilla<br><br>
-Inter vs Milan
-</p>
+<h3>1 Month VIP</h3>
+<p>50 Pi</p>
+<button class="buy" onclick="pay(50,'1 Month VIP')">Buy</button>
 </div>
-</div>
+</section>
 
-<!-- GAMES -->
-<div class="page" id="games">
-<div class="card">
-<h2>Mini Football Games</h2>
-<p>
-Penalty Challenge<br><br>
-Reaction Speed Tap<br><br>
-Guess The Score
-</p>
-</div>
-</div>
-
-<!-- PROFILE -->
-<div class="page" id="profile">
-<div class="card">
-<h2>Your Profile</h2>
-<p>User: Pi Pioneer<br>
-Membership: Free<br>
-Purchases: 0</p>
-<button onclick="loginPi()">Login With Pi</button>
-</div>
-</div>
-
-<!-- NAV -->
-<div class="nav">
-<button class="active" onclick="openTab('home',this)">Home</button>
-<button onclick="openTab('store',this)">Store</button>
-<button onclick="openTab('fixtures',this)">Fixtures</button>
-<button onclick="openTab('games',this)">Games</button>
-<button onclick="openTab('profile',this)">Profile</button>
-</div>
+<!-- ACCOUNT -->
+<section id="account">
+<h2>Account</h2>
+<button class="buy" onclick="login()">Login With Pi</button>
+<div id="status"></div>
+</section>
 
 <script>
-Pi.init({ version:"2.0", sandbox:true });
+Pi.init({ version: "2.0", sandbox: true });
 
-function openTab(id,btn){
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-document.getElementById(id).classList.add("active");
-
-document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
-btn.classList.add("active");
+function openTab(tab){
+document.querySelectorAll("section").forEach(sec=>{
+sec.classList.remove("active");
+});
+document.getElementById(tab).classList.add("active");
 }
 
-async function loginPi(){
+async function login(){
 try{
-const scopes=['username','payments'];
-const auth=await Pi.authenticate(scopes,function(){});
-alert("Welcome "+auth.user.username);
+const scopes = ['username','payments'];
+const auth = await Pi.authenticate(scopes, onIncompletePaymentFound);
+document.getElementById("status").innerHTML =
+"Logged in as: " + auth.user.username;
 }catch(e){
-alert("Login cancelled");
+document.getElementById("status").innerHTML =
+"Login failed";
 }
 }
 
-async function pay(item,amount){
+function onIncompletePaymentFound(payment){
+fetch("https://pi-server-3pra.onrender.com/approve-payment",{
+method:"POST",
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({paymentId:payment.identifier})
+});
+}
+
+async function pay(amount,memo){
 try{
-await Pi.createPayment({
-amount:amount,
-memo:item,
-metadata:{type:item}
-},{
-onReadyForServerApproval:function(paymentId){},
-onReadyForServerCompletion:function(paymentId,txid){},
-onCancel:function(paymentId){
+const paymentData = {
+amount: amount,
+memo: memo,
+metadata: { app: "Socker" }
+};
+
+const callbacks = {
+onReadyForServerApproval: function(paymentId){
+fetch("https://pi-server-3pra.onrender.com/approve-payment",{
+method:"POST",
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({paymentId})
+});
+},
+
+onReadyForServerCompletion: function(paymentId, txid){
+fetch("https://pi-server-3pra.onrender.com/complete-payment",{
+method:"POST",
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({paymentId, txid})
+});
+},
+
+onCancel: function(paymentId){
 alert("Payment cancelled");
 },
-onError:function(error){
-alert("Payment failed");
-}
-});
-}catch(e){
+
+onError: function(error, payment){
 alert("Payment error");
+}
+};
+
+await Pi.createPayment(paymentData, callbacks);
+
+}catch(err){
+alert("Payment failed");
 }
 }
 </script>
