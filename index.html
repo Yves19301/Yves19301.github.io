@@ -2,145 +2,225 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Socker</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Socker Premium</title>
 <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 
 <style>
+*{margin:0;padding:0;box-sizing:border-box}
 body{
-margin:0;
-padding:0;
-font-family:Arial, sans-serif;
-background:#030b18;
-color:white;
-text-align:center;
+font-family:Arial,Helvetica,sans-serif;
+background:#050b16;
+color:#fff;
+padding-bottom:90px;
 }
-
 header{
-background:#101820;
-padding:20px;
+background:#0c1220;
+padding:18px;
+display:flex;
+justify-content:space-between;
+align-items:center;
 font-size:28px;
 font-weight:bold;
 color:#00ff99;
+position:sticky;
+top:0;
+z-index:10;
 }
-
-nav{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:10px;
-padding:15px;
-}
-
-nav button{
-padding:15px 22px;
-border:none;
-border-radius:14px;
+#backBtn{
 background:#00ff99;
-font-size:22px;
+border:none;
+padding:10px 14px;
+border-radius:10px;
 font-weight:bold;
 cursor:pointer;
 }
+.page{display:none;padding:15px;}
+.page.active{display:block;}
 
-section{
-display:none;
-padding:20px;
+.scroll-tabs{
+display:flex;
+overflow-x:auto;
+gap:10px;
+padding:10px 0;
+}
+.scroll-tabs button{
+min-width:150px;
+border:none;
+padding:14px;
+border-radius:30px;
+background:#111a2a;
+color:#fff;
+font-weight:bold;
+}
+.scroll-tabs button.active{
+background:#00ff99;
+color:#000;
 }
 
 .card{
-background:#101820;
+background:#101826;
 padding:15px;
-margin:10px;
-border-radius:15px;
+border-radius:18px;
+margin:12px 0;
+box-shadow:0 0 8px rgba(0,0,0,.4);
+}
+.big{
+font-size:32px;
+font-weight:bold;
+}
+.green{color:#00ff99}
+.red{color:#ff5252}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+}
+.small-btn,.buy{
+background:#00ff99;
+border:none;
+padding:12px;
+border-radius:12px;
+font-weight:bold;
+cursor:pointer;
+width:100%;
 }
 
-.buy{
-padding:12px 20px;
+.bottom{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:#0c1220;
+display:flex;
+justify-content:space-around;
+padding:12px 5px;
+border-top:1px solid #1e2a40;
+}
+.bottom button{
+background:none;
 border:none;
-border-radius:10px;
-background:#00ff99;
+color:#fff;
+font-size:14px;
 font-weight:bold;
-font-size:18px;
 cursor:pointer;
 }
 
-#status{
-margin-top:20px;
-font-size:20px;
-color:#00ff99;
+input{
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+margin:8px 0;
 }
 </style>
 </head>
 
 <body>
 
-<header>⚽ SOCKER</header>
+<header>
+<span>⚽ SOCKER</span>
+<button id="backBtn" onclick="goBack()">⬅ Back</button>
+</header>
 
-<nav>
-<button onclick="showTab('home')">Home</button>
-<button onclick="showTab('lessons')">Lessons</button>
-<button onclick="showTab('tactics')">Tactics</button>
-<button onclick="showTab('predictions')">Predictions</button>
-<button onclick="showTab('store')">Store</button>
-<button onclick="showTab('account')">Account</button>
-</nav>
+<!-- HOME -->
+<section id="home" class="page active">
 
-<section id="home">
-<h1>Welcome to Socker</h1>
-<p>The premium football learning app powered by Pi.</p>
-</section>
-
-<section id="lessons">
-<h2>Lessons</h2>
-
-<div class="card">
-<h3>Passing Mastery</h3>
-<p>Use inside foot for accurate short passes.</p>
+<div class="scroll-tabs">
+<button class="active">Premier League</button>
+<button>La Liga</button>
+<button>Bundesliga</button>
+<button>Serie A</button>
+<button>Ligue 1</button>
 </div>
 
 <div class="card">
-<h3>Dribbling Control</h3>
-<p>Keep ball close and use both feet.</p>
+<h2 class="red">🔴 LIVE NOW</h2>
 </div>
 
 <div class="card">
-<h3>Shooting Power</h3>
-<p>Strike center of ball and follow through.</p>
-</div>
-
-</section>
-
-<section id="tactics">
-<h2>Tactics</h2>
-
-<div class="card">
-<h3>4-3-3 Attack</h3>
-<p>Strong pressing and wing play.</p>
+<p>Premier League • 78'</p>
+<h2>Manchester City <span class="big">2 : 1</span> Liverpool</h2>
+<p class="green">Etihad Stadium</p>
 </div>
 
 <div class="card">
-<h3>4-4-2 Balance</h3>
-<p>Solid defense and counters.</p>
+<p>La Liga • 45+2'</p>
+<h2>Barcelona <span class="big">1 : 1</span> Real Madrid</h2>
+<p class="green">Camp Nou</p>
+</div>
+
+<div class="card">
+<p>Bundesliga • FT</p>
+<h2>Bayern <span class="big">3 : 0</span> Dortmund</h2>
 </div>
 
 </section>
 
-<section id="predictions">
-<h2>Predictions</h2>
+<!-- FIXTURES -->
+<section id="fixtures" class="page">
+<h2>Fixtures</h2>
 
 <div class="card">
-<p>Over 1.5 Goals ⭐⭐⭐⭐</p>
+<p>Tomorrow</p>
+<h3>Arsenal vs Chelsea</h3>
 </div>
 
 <div class="card">
-<p>Home Win Double Chance ⭐⭐⭐⭐</p>
+<p>Tomorrow</p>
+<h3>Juventus vs Milan</h3>
+</div>
+
+<div class="card">
+<p>Sunday</p>
+<h3>PSG vs Marseille</h3>
+</div>
+</section>
+
+<!-- CLUB -->
+<section id="club" class="page">
+<h2>Club Academy</h2>
+
+<div class="grid">
+
+<div class="card">
+<h3>Lessons</h3>
+<p>Passing, dribbling, finishing.</p>
+<button class="small-btn">Open</button>
+</div>
+
+<div class="card">
+<h3>Tactics</h3>
+<p>4-3-3, 4-4-2, pressing.</p>
+<button class="small-btn">Open</button>
+</div>
+
+<div class="card">
+<h3>Training</h3>
+<p>Daily drills to improve.</p>
+<button class="small-btn">Open</button>
+</div>
+
+<div class="card">
+<h3>Discover</h3>
+<p>Find hidden football talent.</p>
+<button class="small-btn">Open</button>
+</div>
+
+</div>
+
+<div class="card">
+<h3>Build Your Career</h3>
+<p>Grow from academy to legend.</p>
+<button class="small-btn">Start</button>
 </div>
 
 </section>
 
-<section id="store">
-<h2>Premium Store</h2>
+<!-- STORE -->
+<section id="store" class="page">
+<h2>VIP Store</h2>
 
 <div class="card">
 <h3>1 Day VIP</h3>
@@ -162,59 +242,61 @@ color:#00ff99;
 
 </section>
 
-<section id="account">
-<h2>Account</h2>
+<!-- PROFILE -->
+<section id="profile" class="page">
+<h2>Profile</h2>
 
-<button class="buy" onclick="login()">Login With Pi</button>
-
-<div id="status"></div>
+<div class="card">
+<button class="buy" onclick="login()">Login with Pi</button>
+<p id="status"></p>
+</div>
 
 </section>
 
+<!-- BOTTOM NAV -->
+<div class="bottom">
+<button onclick="openPage('home')">HOME</button>
+<button onclick="openPage('fixtures')">FIXTURES</button>
+<button onclick="openPage('club')">CLUB</button>
+<button onclick="openPage('store')">STORE</button>
+<button onclick="openPage('profile')">PROFILE</button>
+</div>
+
 <script>
-Pi.init({
-version:"2.0",
-sandbox:true
-});
+Pi.init({version:"2.0",sandbox:true});
 
-window.onload=function(){
-showTab("home");
-};
+let historyStack=["home"];
 
-function showTab(tabId){
+function openPage(id){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById(id).classList.add("active");
 
-let tabs=document.querySelectorAll("section");
+if(historyStack[historyStack.length-1]!==id){
+historyStack.push(id);
+}
+}
 
-tabs.forEach(function(tab){
-tab.style.display="none";
-});
-
-document.getElementById(tabId).style.display="block";
+function goBack(){
+if(historyStack.length>1){
+historyStack.pop();
+let last=historyStack[historyStack.length-1];
+openPage(last);
+historyStack.pop();
+}
 }
 
 async function login(){
-
 try{
-
 const scopes=['username','payments'];
-
 const auth=await Pi.authenticate(scopes,function(){});
-
-document.getElementById("status").innerHTML=
-"Logged in as: "+auth.user.username;
-
+document.getElementById("status").innerHTML="Logged in as "+auth.user.username;
 }catch(e){
-
-document.getElementById("status").innerHTML=
-"Login failed";
-
+document.getElementById("status").innerHTML="Login failed";
 }
 }
 
 async function pay(amount,memo){
-
 try{
-
 const paymentData={
 amount:amount,
 memo:memo,
@@ -224,45 +306,29 @@ metadata:{app:"Socker"}
 const callbacks={
 
 onReadyForServerApproval:function(paymentId){
-
 fetch("https://pi-server-3pra.onrender.com/approve-payment",{
 method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
+headers:{"Content-Type":"application/json"},
 body:JSON.stringify({paymentId})
 });
-
 },
 
 onReadyForServerCompletion:function(paymentId,txid){
-
 fetch("https://pi-server-3pra.onrender.com/complete-payment",{
 method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
+headers:{"Content-Type":"application/json"},
 body:JSON.stringify({paymentId,txid})
 });
-
 },
 
-onCancel:function(){
-alert("Payment canceled");
-},
-
-onError:function(){
-alert("Payment error");
-}
-
+onCancel:function(){alert("Payment canceled");},
+onError:function(){alert("Payment error");}
 };
 
 Pi.createPayment(paymentData,callbacks);
 
 }catch(err){
-
 alert("Payment failed");
-
 }
 }
 </script>
