@@ -2,414 +2,290 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Socker Starter</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Socker App</title>
 <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, sans-serif;
+}
+
 body{
-font-family:Arial,Helvetica,sans-serif;
-background:#08111f;
-color:#fff;
-padding-bottom:80px;
+background:#0d1117;
+color:white;
+padding-bottom:90px;
 }
+
 header{
-background:#0d1628;
+background:#111827;
 padding:15px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-position:sticky;
-top:0;
-z-index:100;
-}
-.logo{
-font-size:26px;
+text-align:center;
+font-size:24px;
 font-weight:bold;
-color:#00ff99;
+color:#00e0ff;
+box-shadow:0 2px 10px rgba(0,0,0,.4);
 }
-.back{
-background:#00ff99;
-border:none;
-padding:10px 14px;
-border-radius:10px;
-font-weight:bold;
-cursor:pointer;
+
+.container{
+padding:15px;
 }
-.page{display:none;padding:15px}
-.page.active{display:block}
+
+.tab{
+display:none;
+animation:fade .3s ease;
+}
+
+.tab.active{
+display:block;
+}
 
 .card{
-background:#101b30;
+background:#161b22;
 padding:15px;
-border-radius:18px;
-margin:12px 0;
-box-shadow:0 0 10px rgba(0,0,0,.35);
-}
-.green{
-background:#00ff99;
-color:#000;
-border:none;
-padding:12px;
+margin-bottom:12px;
 border-radius:12px;
-font-weight:bold;
+box-shadow:0 0 8px rgba(0,0,0,.3);
+}
+
+.card h3{
+color:#00e0ff;
+margin-bottom:8px;
+}
+
+button{
+padding:12px;
 width:100%;
+border:none;
+border-radius:10px;
+background:#00e0ff;
+font-weight:bold;
+font-size:16px;
+margin-top:10px;
 cursor:pointer;
 }
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
+
+button:hover{
+opacity:.9;
 }
-.nav{
+
+.bottom-nav{
 position:fixed;
 bottom:0;
 left:0;
 right:0;
-background:#0d1628;
 display:flex;
 justify-content:space-around;
-padding:12px 5px;
+background:#111827;
+padding:10px 0;
+box-shadow:0 -2px 10px rgba(0,0,0,.4);
 }
-.nav button{
+
+.bottom-nav button{
 background:none;
-border:none;
-color:#fff;
-font-weight:bold;
-cursor:pointer;
+color:white;
 font-size:13px;
+width:auto;
+padding:5px;
 }
-.tabs{
-display:flex;
-gap:10px;
-overflow-x:auto;
-padding-bottom:8px;
-}
-.tabs button{
-min-width:145px;
-border:none;
-padding:12px;
-border-radius:24px;
-background:#16243f;
-color:#fff;
+
+.bottom-nav button.active{
+color:#00e0ff;
 font-weight:bold;
-cursor:pointer;
 }
-.tabs button.active{
-background:#00ff99;
-color:#000;
+
+.lesson-btn{
+background:#1f2937;
+margin-top:8px;
 }
-.small{font-size:13px;color:#cfd7e4}
-.coin{
-background:#ffd54f;
-color:#000;
-padding:4px 8px;
-border-radius:8px;
-font-weight:bold;
-font-size:12px;
-display:inline-block;
+
+.small{
+font-size:14px;
+opacity:.8;
+margin-top:5px;
 }
-#status{margin-top:10px;color:#00ff99}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(8px);}
+to{opacity:1;transform:translateY(0);}
+}
 </style>
 </head>
 
 <body>
 
-<header>
-<div class="logo">⚽ SOCKER</div>
-<button class="back" onclick="goBack()">⬅ Back</button>
-</header>
+<header>⚽ Socker App</header>
+
+<div class="container">
 
 <!-- HOME -->
-<section id="home" class="page active">
-
+<div class="tab active" id="home">
 <div class="card">
-<h3>Welcome to Socker</h3>
-<p class="small">Football learning • Predictions • Rewards • Pi Economy</p>
-<p style="margin-top:8px;">Wallet: <span class="coin">120 SC Coin</span></p>
-</div>
-
-<div class="tabs">
-<button class="active" onclick="league('pl',this)">Premier League</button>
-<button onclick="league('laliga',this)">La Liga</button>
-<button onclick="league('bundes',this)">Bundesliga</button>
-<button onclick="league('seriea',this)">Serie A</button>
-</div>
-
-<div id="leagueBox"></div>
-
-<div class="card">
-<h3>🎁 Daily Reward</h3>
-<p>Open app every day and collect 5 SC Coin.</p>
-<button class="green">Claim Reward</button>
+<h3>Welcome</h3>
+<p>Socker App is your place to Learn • Play • Earn.</p>
+<p class="small">Football tips, Web3 lessons, games and premium rewards.</p>
 </div>
 
 <div class="card">
-<h3>🔥 Free Prediction Today</h3>
-<p>Over 1.5 Goals ⭐⭐⭐⭐</p>
+<h3>Featured Matches</h3>
+<p>Arsenal vs Chelsea</p>
+<p>Real Madrid vs Barcelona</p>
+<p>Bayern vs Dortmund</p>
+</div>
 </div>
 
-</section>
-
-<!-- FIXTURES -->
-<section id="fixtures" class="page">
-<h2>Fixtures</h2>
-
-<div class="card">Arsenal vs Chelsea • Tomorrow</div>
-<div class="card">Barcelona vs Sevilla • Tomorrow</div>
-<div class="card">Bayern vs Leipzig • Sunday</div>
-<div class="card">Juventus vs Milan • Sunday</div>
-
-</section>
-
-<!-- CLUB -->
-<section id="club" class="page">
-<h2>Club Academy</h2>
-
-<div class="grid">
-
+<!-- PREDICTIONS -->
+<div class="tab" id="predict">
 <div class="card">
-<h3>Lessons</h3>
-<p class="small">Learn real football skills.</p>
-<button class="green" onclick="openPage('lessons')">Open</button>
+<h3>Today Predictions</h3>
+<p>✔ Arsenal Win</p>
+<p>✔ Over 2.5 Goals</p>
+<p>✔ Both Teams Score</p>
 </div>
 
 <div class="card">
-<h3>Tactics</h3>
-<p class="small">Winning formations.</p>
-<button class="green" onclick="openPage('tactics')">Open</button>
+<h3>VIP Picks</h3>
+<p>Unlock premium predictions with Pi payment.</p>
+<button onclick="pay()">Pay with Pi</button>
 </div>
-
-<div class="card">
-<h3>Training</h3>
-<p class="small">Daily drills.</p>
-<button class="green" onclick="openPage('training')">Open</button>
 </div>
-
-<div class="card">
-<h3>Trivia Game</h3>
-<p class="small">Win SC Coin.</p>
-<button class="green" onclick="openPage('trivia')">Play</button>
-</div>
-
-</div>
-</section>
 
 <!-- LESSONS -->
-<section id="lessons" class="page">
-<h2>Lessons</h2>
+<div class="tab" id="lessons">
 
 <div class="card">
-<h3>Passing Basics</h3>
-<p>Use inside foot for short accurate pass. Scan before receiving ball.</p>
+<h3>Football Masterclass</h3>
+<button class="lesson-btn" onclick="openLesson('lesson1')">Attack Tactics</button>
+<button class="lesson-btn" onclick="openLesson('lesson2')">Defense Strategy</button>
+<button class="lesson-btn" onclick="openLesson('lesson3')">Betting Wisdom</button>
 </div>
 
 <div class="card">
-<h3>Dribbling Control</h3>
-<p>Keep ball close, touch every step, use both feet.</p>
+<h3>Web3 Academy</h3>
+<button class="lesson-btn" onclick="openLesson('lesson4')">What is Blockchain?</button>
+<button class="lesson-btn" onclick="openLesson('lesson5')">Crypto Wallet Basics</button>
+<button class="lesson-btn" onclick="openLesson('lesson6')">Avoid Scams</button>
 </div>
 
 <div class="card">
-<h3>Finishing</h3>
-<p>Plant support foot beside ball. Keep head down when striking.</p>
+<h3>AI Skills</h3>
+<button class="lesson-btn" onclick="openLesson('lesson7')">Use AI to Earn</button>
+<button class="lesson-btn" onclick="openLesson('lesson8')">Best AI Tools</button>
+</div>
+
+<div class="card" id="lessonContent">
+<h3>Open a lesson above</h3>
+<p>Users click any lesson to read full content.</p>
+</div>
+
+</div>
+
+<!-- GAMES -->
+<div class="tab" id="games">
+
+<div class="card">
+<h3>Football Quiz</h3>
+<p>Who won World Cup 2022?</p>
+<button onclick="alert('Argentina ✔')">Show Answer</button>
 </div>
 
 <div class="card">
-<h3>🔒 Advanced Striker Course</h3>
-<p>Unlock premium lesson.</p>
-<button class="green" onclick="pay(0.000006,'Advanced Lesson')">Buy 0.000006 Pi</button>
-</div>
-
-</section>
-
-<!-- TACTICS -->
-<section id="tactics" class="page">
-<h2>Tactics</h2>
-
-<div class="card">
-<h3>4-3-3 Attack</h3>
-<p>Use width from wingers, press high after losing ball.</p>
+<h3>Penalty Challenge</h3>
+<button onclick="penalty()">Shoot Penalty</button>
+<p id="penaltyResult"></p>
 </div>
 
 <div class="card">
-<h3>4-4-2 Balance</h3>
-<p>Compact defense with fast counter attacks.</p>
+<h3>Score Predictor</h3>
+<p>Predict Arsenal vs Chelsea</p>
+<button onclick="alert('Good luck!')">Submit Prediction</button>
+</div>
+
+</div>
+
+<!-- NEWS -->
+<div class="tab" id="news">
+<div class="card">
+<h3>Latest News</h3>
+<p>Mbappe shines in training.</p>
+<p>Barcelona signs young star.</p>
+<p>Premier League title race heats up.</p>
+</div>
+</div>
+
+<!-- SETTINGS -->
+<div class="tab" id="settings">
+
+<div class="card">
+<h3>Language</h3>
+<input type="text" placeholder="Search language..." style="width:100%;padding:10px;border-radius:8px;border:none;">
+<p class="small">English, Français, Kiswahili, Kirundi, Español, Português</p>
 </div>
 
 <div class="card">
-<h3>3-5-2 Possession</h3>
-<p>Wingbacks create width, dominate midfield.</p>
+<h3>About App</h3>
+<p>Socker App helps users learn modern skills and enjoy football content.</p>
 </div>
 
-</section>
-
-<!-- TRAINING -->
-<section id="training" class="page">
-<h2>Training Plan</h2>
-
-<div class="card">Monday: Sprint + Ball Control</div>
-<div class="card">Tuesday: Passing Accuracy</div>
-<div class="card">Wednesday: Finishing Session</div>
-<div class="card">Thursday: Stamina Run</div>
-
-</section>
-
-<!-- TRIVIA -->
-<section id="trivia" class="page">
-<h2>Trivia Game</h2>
-
-<div class="card">
-<h3>Who won World Cup 2022?</h3>
-<p>A. France</p>
-<p>B. Argentina</p>
-<p>C. Brazil</p>
-<button class="green">Answer B (+10 SC)</button>
 </div>
 
-<div class="card">
-<h3>Messi Ballon d'Or?</h3>
-<p>A. 8</p>
-<p>B. 6</p>
-<p>C. 5</p>
-<button class="green">Answer A (+10 SC)</button>
 </div>
-
-</section>
-
-<!-- STORE -->
-<section id="store" class="page">
-<h2>Store</h2>
-
-<div class="card">
-<h3>Prediction Pack</h3>
-<p>3 VIP tips today</p>
-<button class="green" onclick="pay(0.000003,'Prediction Pack')">Buy 0.000003 Pi</button>
-</div>
-
-<div class="card">
-<h3>VIP Day Pass</h3>
-<p>Premium access 24h</p>
-<button class="green" onclick="pay(0.000010,'VIP Day')">Buy 0.000010 Pi</button>
-</div>
-
-<div class="card">
-<h3>Monthly VIP</h3>
-<p>All features unlocked</p>
-<button class="green" onclick="pay(0.000060,'Monthly VIP')">Buy 0.000060 Pi</button>
-</div>
-
-</section>
-
-<!-- PROFILE -->
-<section id="profile" class="page">
-<h2>Profile</h2>
-
-<div class="card">
-<p>User Level: Rookie</p>
-<p>SC Coin: 120</p>
-<p>Completed Lessons: 3</p>
-</div>
-
-<div class="card">
-<button class="green" onclick="login()">Login with Pi</button>
-<p id="status"></p>
-</div>
-
-</section>
 
 <!-- NAV -->
-<div class="nav">
-<button onclick="openPage('home')">HOME</button>
-<button onclick="openPage('fixtures')">FIXTURES</button>
-<button onclick="openPage('club')">CLUB</button>
-<button onclick="openPage('store')">STORE</button>
-<button onclick="openPage('profile')">PROFILE</button>
+<div class="bottom-nav">
+<button class="active" onclick="showTab('home',this)">Home</button>
+<button onclick="showTab('predict',this)">Tips</button>
+<button onclick="showTab('lessons',this)">Lessons</button>
+<button onclick="showTab('games',this)">Games</button>
+<button onclick="showTab('news',this)">News</button>
+<button onclick="showTab('settings',this)">Settings</button>
 </div>
 
 <script>
-Pi.init({version:"2.0",sandbox:true});
-
-let stack=["home"];
-
-function openPage(id){
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-document.getElementById(id).classList.add("active");
-if(stack[stack.length-1]!==id){stack.push(id);}
+if(window.Pi){
+Pi.init({version:"2.0"});
 }
 
-function goBack(){
-if(stack.length>1){
-stack.pop();
-let prev=stack[stack.length-1];
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-document.getElementById(prev).classList.add("active");
-}
+function showTab(id,el){
+document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+
+document.querySelectorAll('.bottom-nav button').forEach(b=>b.classList.remove('active'));
+el.classList.add('active');
 }
 
-function league(name,btn){
-document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
-btn.classList.add("active");
-
-let box=document.getElementById("leagueBox");
-
-if(name=="pl"){
-box.innerHTML='<div class="card"><h3>Premier League Live</h3><p>Man City 2 - 1 Liverpool</p></div>';
-}
-if(name=="laliga"){
-box.innerHTML='<div class="card"><h3>La Liga Live</h3><p>Barcelona 1 - 1 Real Madrid</p></div>';
-}
-if(name=="bundes"){
-box.innerHTML='<div class="card"><h3>Bundesliga</h3><p>Bayern 3 - 0 Dortmund</p></div>';
-}
-if(name=="seriea"){
-box.innerHTML='<div class="card"><h3>Serie A</h3><p>Juventus 2 - 0 Milan</p></div>';
-}
-}
-
-window.onload=function(){
-league("pl",document.querySelector(".tabs button"));
-};
-
-async function login(){
-try{
-const auth=await Pi.authenticate(['username','payments'],function(){});
-document.getElementById("status").innerHTML="Logged in as "+auth.user.username;
-}catch(e){
-document.getElementById("status").innerHTML="Login failed";
-}
-}
-
-function pay(amount,memo){
+function openLesson(name){
+const box=document.getElementById("lessonContent");
 
 const data={
-amount:amount,
-memo:memo,
-metadata:{app:"Socker"}
+lesson1:"Attack Tactics: Use width, quick passing and movement to break defenses.",
+lesson2:"Defense Strategy: Stay compact, communicate and press wisely.",
+lesson3:"Betting Wisdom: Never chase losses. Use bankroll management.",
+lesson4:"Blockchain is a secure digital ledger shared across many computers.",
+lesson5:"Crypto Wallet stores your digital assets safely using private keys.",
+lesson6:"Avoid Scams: Never share seed phrase. Verify links always.",
+lesson7:"Use AI for writing, design, coding and automation income.",
+lesson8:"Top AI Tools: ChatGPT, image tools, coding assistants."
 };
 
-Pi.createPayment(data,{
+box.innerHTML="<h3>Lesson Opened</h3><p>"+data[name]+"</p>";
+}
 
-onReadyForServerApproval:function(paymentId){
-fetch("https://pi-server-3pra.onrender.com/approve-payment",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({paymentId})
-});
-},
+function penalty(){
+const goals=["GOAL! ⚽","Saved 🧤","Missed ❌"];
+document.getElementById("penaltyResult").innerText=
+goals[Math.floor(Math.random()*goals.length)];
+}
 
-onReadyForServerCompletion:function(paymentId,txid){
-fetch("https://pi-server-3pra.onrender.com/complete-payment",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({paymentId,txid})
-});
-},
-
-onCancel:function(){alert("Payment canceled");},
-onError:function(){alert("Payment error");}
-
-});
+async function pay(){
+try{
+alert("Pi Payment Opening...");
+}catch(e){
+alert("Payment failed");
+}
 }
 </script>
 
