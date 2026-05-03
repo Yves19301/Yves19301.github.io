@@ -2,122 +2,76 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Socker App</title>
-<script src="https://sdk.minepi.com/pi-sdk.js"></script>
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Socker Academy</title>
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, sans-serif;
-}
-
-body{
-background:#0d1117;
-color:white;
-padding-bottom:90px;
-}
-
-header{
-background:#111827;
-padding:15px;
-text-align:center;
-font-size:24px;
-font-weight:bold;
-color:#00e0ff;
-box-shadow:0 2px 10px rgba(0,0,0,.4);
-}
-
-.container{
-padding:15px;
-}
-
-.tab{
-display:none;
-animation:fade .3s ease;
-}
-
-.tab.active{
-display:block;
-}
-
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#0f172a;color:#fff;padding-bottom:80px}
+header{background:#111827;padding:15px;text-align:center;font-size:24px;font-weight:bold;color:#38bdf8}
+.container{padding:15px}
+.tab{display:none}
+.tab.active{display:block}
 .card{
-background:#161b22;
+background:#1e293b;
 padding:15px;
-margin-bottom:12px;
 border-radius:12px;
-box-shadow:0 0 8px rgba(0,0,0,.3);
+margin-bottom:12px;
+box-shadow:0 4px 10px rgba(0,0,0,.3)
 }
-
-.card h3{
-color:#00e0ff;
-margin-bottom:8px;
-}
-
+.card h3{color:#38bdf8;margin-bottom:10px}
 button{
-padding:12px;
 width:100%;
+padding:12px;
+margin-top:8px;
 border:none;
 border-radius:10px;
-background:#00e0ff;
+background:#38bdf8;
 font-weight:bold;
-font-size:16px;
-margin-top:10px;
-cursor:pointer;
+cursor:pointer
 }
-
-button:hover{
-opacity:.9;
-}
-
+button:hover{opacity:.9}
 .bottom-nav{
 position:fixed;
-bottom:0;
-left:0;
-right:0;
+bottom:0;left:0;right:0;
 display:flex;
 justify-content:space-around;
 background:#111827;
-padding:10px 0;
-box-shadow:0 -2px 10px rgba(0,0,0,.4);
+padding:10px 0
 }
-
 .bottom-nav button{
 background:none;
-color:white;
-font-size:13px;
+color:#fff;
+font-size:12px;
 width:auto;
-padding:5px;
+padding:5px
 }
-
-.bottom-nav button.active{
-color:#00e0ff;
-font-weight:bold;
+.bottom-nav button.active{color:#38bdf8}
+.progress{
+width:100%;
+height:10px;
+background:#334155;
+border-radius:10px;
+overflow:hidden;
+margin-top:10px
 }
-
-.lesson-btn{
-background:#1f2937;
-margin-top:8px;
+.progress-bar{
+height:100%;
+width:0%;
+background:#38bdf8
 }
-
-.small{
-font-size:14px;
-opacity:.8;
-margin-top:5px;
-}
-
-@keyframes fade{
-from{opacity:0;transform:translateY(8px);}
-to{opacity:1;transform:translateY(0);}
+.small{font-size:14px;opacity:.8}
+input{
+width:100%;
+padding:10px;
+border:none;
+border-radius:8px;
+margin-top:8px
 }
 </style>
 </head>
-
 <body>
 
-<header>⚽ Socker App</header>
+<header>⚽ Socker Academy</header>
 
 <div class="container">
 
@@ -125,60 +79,75 @@ to{opacity:1;transform:translateY(0);}
 <div class="tab active" id="home">
 <div class="card">
 <h3>Welcome</h3>
-<p>Socker App is your place to Learn • Play • Earn.</p>
-<p class="small">Football tips, Web3 lessons, games and premium rewards.</p>
+<p>Learn football like a pro. Improve tactics, predictions and skills daily.</p>
 </div>
 
 <div class="card">
 <h3>Featured Matches</h3>
 <p>Arsenal vs Chelsea</p>
-<p>Real Madrid vs Barcelona</p>
+<p>Barcelona vs Madrid</p>
 <p>Bayern vs Dortmund</p>
+</div>
+
+<div class="card">
+<h3>Daily Motivation</h3>
+<p>Discipline beats talent when talent does not work hard.</p>
 </div>
 </div>
 
 <!-- PREDICTIONS -->
-<div class="tab" id="predict">
+<div class="tab" id="tips">
 <div class="card">
-<h3>Today Predictions</h3>
+<h3>Today's Predictions</h3>
 <p>✔ Arsenal Win</p>
 <p>✔ Over 2.5 Goals</p>
 <p>✔ Both Teams Score</p>
 </div>
 
 <div class="card">
-<h3>VIP Picks</h3>
-<p>Unlock premium predictions with Pi payment.</p>
+<h3>Betting Wisdom</h3>
+<p>Never chase losses. Use bankroll control. Bet smart.</p>
+</div>
+
+<div class="card">
+<h3>VIP Premium</h3>
+<p>Unlock elite picks and advanced analysis.</p>
 <button onclick="pay()">Pay with Pi</button>
 </div>
 </div>
 
-<!-- LESSONS -->
-<div class="tab" id="lessons">
+<!-- ACADEMY -->
+<div class="tab" id="academy">
 
 <div class="card">
-<h3>Football Masterclass</h3>
-<button class="lesson-btn" onclick="openLesson('lesson1')">Attack Tactics</button>
-<button class="lesson-btn" onclick="openLesson('lesson2')">Defense Strategy</button>
-<button class="lesson-btn" onclick="openLesson('lesson3')">Betting Wisdom</button>
+<h3>Football Modules</h3>
+<button onclick="lesson('tactics')">Tactics</button>
+<button onclick="lesson('formations')">Formations</button>
+<button onclick="lesson('attack')">Attack Training</button>
+<button onclick="lesson('defense')">Defense Training</button>
+<button onclick="lesson('midfield')">Midfield Control</button>
+<button onclick="lesson('setpieces')">Set Pieces</button>
+<button onclick="lesson('betting')">Betting IQ</button>
+</div>
+
+<div class="card" id="lessonBox">
+<h3>Open Module</h3>
+<p>Select any football module above.</p>
 </div>
 
 <div class="card">
-<h3>Web3 Academy</h3>
-<button class="lesson-btn" onclick="openLesson('lesson4')">What is Blockchain?</button>
-<button class="lesson-btn" onclick="openLesson('lesson5')">Crypto Wallet Basics</button>
-<button class="lesson-btn" onclick="openLesson('lesson6')">Avoid Scams</button>
+<h3>Academy Progress</h3>
+<p id="progressText">0% Completed</p>
+<div class="progress"><div class="progress-bar" id="bar"></div></div>
 </div>
 
 <div class="card">
-<h3>AI Skills</h3>
-<button class="lesson-btn" onclick="openLesson('lesson7')">Use AI to Earn</button>
-<button class="lesson-btn" onclick="openLesson('lesson8')">Best AI Tools</button>
-</div>
-
-<div class="card" id="lessonContent">
-<h3>Open a lesson above</h3>
-<p>Users click any lesson to read full content.</p>
+<h3>Quick Quiz</h3>
+<p>Which formation uses 3 defenders?</p>
+<button onclick="quiz('wrong')">4-4-2</button>
+<button onclick="quiz('right')">3-5-2</button>
+<button onclick="quiz('wrong')">4-3-3</button>
+<p id="quizResult"></p>
 </div>
 
 </div>
@@ -187,21 +156,22 @@ to{opacity:1;transform:translateY(0);}
 <div class="tab" id="games">
 
 <div class="card">
-<h3>Football Quiz</h3>
-<p>Who won World Cup 2022?</p>
-<button onclick="alert('Argentina ✔')">Show Answer</button>
-</div>
-
-<div class="card">
 <h3>Penalty Challenge</h3>
-<button onclick="penalty()">Shoot Penalty</button>
+<button onclick="penalty()">Shoot</button>
 <p id="penaltyResult"></p>
 </div>
 
 <div class="card">
-<h3>Score Predictor</h3>
+<h3>Guess Score</h3>
 <p>Predict Arsenal vs Chelsea</p>
-<button onclick="alert('Good luck!')">Submit Prediction</button>
+<input placeholder="Example 2-1">
+<button onclick="alert('Prediction saved!')">Submit</button>
+</div>
+
+<div class="card">
+<h3>Football Quiz</h3>
+<p>Who won World Cup 2022?</p>
+<button onclick="alert('Argentina')">Show Answer</button>
 </div>
 
 </div>
@@ -209,27 +179,25 @@ to{opacity:1;transform:translateY(0);}
 <!-- NEWS -->
 <div class="tab" id="news">
 <div class="card">
-<h3>Latest News</h3>
-<p>Mbappe shines in training.</p>
-<p>Barcelona signs young star.</p>
-<p>Premier League title race heats up.</p>
+<h3>Latest Football News</h3>
+<p>Barcelona signs new midfielder.</p>
+<p>Premier League title race intensifies.</p>
+<p>Top striker returns from injury.</p>
 </div>
 </div>
 
 <!-- SETTINGS -->
 <div class="tab" id="settings">
-
 <div class="card">
-<h3>Language</h3>
-<input type="text" placeholder="Search language..." style="width:100%;padding:10px;border-radius:8px;border:none;">
+<h3>Language Search</h3>
+<input placeholder="Search language">
 <p class="small">English, Français, Kiswahili, Kirundi, Español, Português</p>
 </div>
 
 <div class="card">
-<h3>About App</h3>
-<p>Socker App helps users learn modern skills and enjoy football content.</p>
+<h3>About</h3>
+<p>Socker Academy helps users learn football professionally.</p>
 </div>
-
 </div>
 
 </div>
@@ -237,17 +205,15 @@ to{opacity:1;transform:translateY(0);}
 <!-- NAV -->
 <div class="bottom-nav">
 <button class="active" onclick="showTab('home',this)">Home</button>
-<button onclick="showTab('predict',this)">Tips</button>
-<button onclick="showTab('lessons',this)">Lessons</button>
+<button onclick="showTab('tips',this)">Tips</button>
+<button onclick="showTab('academy',this)">Academy</button>
 <button onclick="showTab('games',this)">Games</button>
 <button onclick="showTab('news',this)">News</button>
 <button onclick="showTab('settings',this)">Settings</button>
 </div>
 
 <script>
-if(window.Pi){
-Pi.init({version:"2.0"});
-}
+let progress=0;
 
 function showTab(id,el){
 document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
@@ -257,35 +223,48 @@ document.querySelectorAll('.bottom-nav button').forEach(b=>b.classList.remove('a
 el.classList.add('active');
 }
 
-function openLesson(name){
-const box=document.getElementById("lessonContent");
+function lesson(type){
+const box=document.getElementById("lessonBox");
 
 const data={
-lesson1:"Attack Tactics: Use width, quick passing and movement to break defenses.",
-lesson2:"Defense Strategy: Stay compact, communicate and press wisely.",
-lesson3:"Betting Wisdom: Never chase losses. Use bankroll management.",
-lesson4:"Blockchain is a secure digital ledger shared across many computers.",
-lesson5:"Crypto Wallet stores your digital assets safely using private keys.",
-lesson6:"Avoid Scams: Never share seed phrase. Verify links always.",
-lesson7:"Use AI for writing, design, coding and automation income.",
-lesson8:"Top AI Tools: ChatGPT, image tools, coding assistants."
+tactics:"Tactics: Control space, press wisely, transition quickly, exploit weak flanks.",
+formations:"4-3-3 attack width. 4-4-2 balance. 3-5-2 midfield dominance.",
+attack:"Attack: movement, finishing, one-touch passing, overlaps and crossing.",
+defense:"Defense: compact lines, communication, zonal marking, pressing triggers.",
+midfield:"Midfield: tempo control, passing triangles, support angles, transitions.",
+setpieces:"Corners, free kicks, near-post runs, defensive organization.",
+betting:"Betting IQ: value bets, bankroll control, avoid emotional betting."
 };
 
-box.innerHTML="<h3>Lesson Opened</h3><p>"+data[name]+"</p>";
+box.innerHTML="<h3>"+type.toUpperCase()+"</h3><p>"+data[type]+"</p>";
+
+if(progress<100){
+progress+=15;
+document.getElementById("bar").style.width=progress+"%";
+document.getElementById("progressText").innerText=progress+"% Completed";
+}
+}
+
+function quiz(ans){
+if(ans=="right"){
+document.getElementById("quizResult").innerText="Correct! +10%";
+if(progress<100){
+progress+=10;
+document.getElementById("bar").style.width=progress+"%";
+document.getElementById("progressText").innerText=progress+"% Completed";
+}
+}else{
+document.getElementById("quizResult").innerText="Wrong answer.";
+}
 }
 
 function penalty(){
-const goals=["GOAL! ⚽","Saved 🧤","Missed ❌"];
-document.getElementById("penaltyResult").innerText=
-goals[Math.floor(Math.random()*goals.length)];
+let r=["GOAL ⚽","Saved 🧤","Missed ❌"];
+document.getElementById("penaltyResult").innerText=r[Math.floor(Math.random()*3)];
 }
 
-async function pay(){
-try{
-alert("Pi Payment Opening...");
-}catch(e){
-alert("Payment failed");
-}
+function pay(){
+alert("Pi Premium Payment Ready. Connect backend to activate real payment.");
 }
 </script>
 
