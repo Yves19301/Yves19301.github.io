@@ -3,22 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Socker Academy</title>
+<title>Socker App</title>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#0f172a;color:#fff;padding-bottom:80px}
-header{background:#111827;padding:15px;text-align:center;font-size:24px;font-weight:bold;color:#38bdf8}
+body{
+background:#0b0f19;
+color:#fff;
+padding-bottom:80px;
+overflow-x:hidden;
+}
+header{
+background:#111827;
+padding:15px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+color:#38bdf8;
+box-shadow:0 2px 10px rgba(0,0,0,.4);
+}
 .container{padding:15px}
 .tab{display:none}
 .tab.active{display:block}
 .card{
-background:#1e293b;
+background:#161b22;
 padding:15px;
-border-radius:12px;
+border-radius:14px;
 margin-bottom:12px;
-box-shadow:0 4px 10px rgba(0,0,0,.3)
+box-shadow:0 4px 10px rgba(0,0,0,.35);
 }
-.card h3{color:#38bdf8;margin-bottom:10px}
+.card h3{
+color:#38bdf8;
+margin-bottom:8px;
+}
 button{
 width:100%;
 padding:12px;
@@ -27,51 +44,97 @@ border:none;
 border-radius:10px;
 background:#38bdf8;
 font-weight:bold;
-cursor:pointer
+cursor:pointer;
 }
-button:hover{opacity:.9}
+button:hover{opacity:.92}
+
 .bottom-nav{
 position:fixed;
-bottom:0;left:0;right:0;
+bottom:0;
+left:0;
+right:0;
+background:#111827;
 display:flex;
 justify-content:space-around;
-background:#111827;
-padding:10px 0
+padding:10px 0;
+box-shadow:0 -2px 10px rgba(0,0,0,.5);
+z-index:50;
 }
 .bottom-nav button{
 background:none;
 color:#fff;
-font-size:12px;
 width:auto;
-padding:5px
+padding:5px;
+font-size:13px;
 }
-.bottom-nav button.active{color:#38bdf8}
+.bottom-nav button.active{
+color:#38bdf8;
+font-weight:bold;
+}
+
+/* More Menu */
+.more-menu{
+position:fixed;
+top:0;
+right:-100%;
+width:100%;
+height:100%;
+background:#05070d;
+z-index:100;
+padding:20px;
+transition:.35s;
+overflow-y:auto;
+}
+.more-menu.show{
+right:0;
+}
+.more-title{
+font-size:24px;
+color:#38bdf8;
+margin-bottom:20px;
+}
+.menu-item{
+background:#111827;
+padding:15px;
+border-radius:12px;
+margin-bottom:12px;
+font-size:18px;
+cursor:pointer;
+}
+.menu-item:hover{
+background:#1f2937;
+}
+.back-btn{
+background:#ef4444;
+}
+
 .progress{
 width:100%;
 height:10px;
 background:#334155;
 border-radius:10px;
 overflow:hidden;
-margin-top:10px
+margin-top:10px;
 }
 .progress-bar{
 height:100%;
 width:0%;
-background:#38bdf8
+background:#38bdf8;
 }
+
 .small{font-size:14px;opacity:.8}
 input{
 width:100%;
 padding:10px;
 border:none;
 border-radius:8px;
-margin-top:8px
+margin-top:8px;
 }
 </style>
 </head>
 <body>
 
-<header>⚽ Socker Academy</header>
+<header>⚽ Socker App</header>
 
 <div class="container">
 
@@ -79,39 +142,39 @@ margin-top:8px
 <div class="tab active" id="home">
 <div class="card">
 <h3>Welcome</h3>
-<p>Learn football like a pro. Improve tactics, predictions and skills daily.</p>
+<p>Learn • Play • Earn with modern football content.</p>
 </div>
 
 <div class="card">
 <h3>Featured Matches</h3>
 <p>Arsenal vs Chelsea</p>
-<p>Barcelona vs Madrid</p>
+<p>Madrid vs Barcelona</p>
 <p>Bayern vs Dortmund</p>
 </div>
+</div>
 
+<!-- FIXTURES -->
+<div class="tab" id="fixtures">
 <div class="card">
-<h3>Daily Motivation</h3>
-<p>Discipline beats talent when talent does not work hard.</p>
+<h3>Today's Fixtures</h3>
+<p>18:00 Arsenal vs Chelsea</p>
+<p>20:00 Inter vs Milan</p>
+<p>22:00 PSG vs Marseille</p>
 </div>
 </div>
 
-<!-- PREDICTIONS -->
+<!-- TIPS -->
 <div class="tab" id="tips">
 <div class="card">
-<h3>Today's Predictions</h3>
-<p>✔ Arsenal Win</p>
+<h3>Daily Tips</h3>
 <p>✔ Over 2.5 Goals</p>
+<p>✔ Arsenal Double Chance</p>
 <p>✔ Both Teams Score</p>
 </div>
 
 <div class="card">
-<h3>Betting Wisdom</h3>
-<p>Never chase losses. Use bankroll control. Bet smart.</p>
-</div>
-
-<div class="card">
 <h3>VIP Premium</h3>
-<p>Unlock elite picks and advanced analysis.</p>
+<p>Unlock elite predictions.</p>
 <button onclick="pay()">Pay with Pi</button>
 </div>
 </div>
@@ -120,41 +183,50 @@ margin-top:8px
 <div class="tab" id="academy">
 
 <div class="card">
-<h3>Football Modules</h3>
+<h3>Modules</h3>
 <button onclick="lesson('tactics')">Tactics</button>
 <button onclick="lesson('formations')">Formations</button>
-<button onclick="lesson('attack')">Attack Training</button>
-<button onclick="lesson('defense')">Defense Training</button>
-<button onclick="lesson('midfield')">Midfield Control</button>
-<button onclick="lesson('setpieces')">Set Pieces</button>
+<button onclick="lesson('attack')">Attack</button>
+<button onclick="lesson('defense')">Defense</button>
 <button onclick="lesson('betting')">Betting IQ</button>
 </div>
 
 <div class="card" id="lessonBox">
 <h3>Open Module</h3>
-<p>Select any football module above.</p>
+<p>Select lesson above.</p>
 </div>
 
 <div class="card">
-<h3>Academy Progress</h3>
+<h3>Progress</h3>
 <p id="progressText">0% Completed</p>
 <div class="progress"><div class="progress-bar" id="bar"></div></div>
 </div>
 
-<div class="card">
-<h3>Quick Quiz</h3>
-<p>Which formation uses 3 defenders?</p>
-<button onclick="quiz('wrong')">4-4-2</button>
-<button onclick="quiz('right')">3-5-2</button>
-<button onclick="quiz('wrong')">4-3-3</button>
-<p id="quizResult"></p>
 </div>
 
+<!-- CLUB -->
+<div class="tab" id="club">
+<div class="card">
+<h3>Top Clubs</h3>
+<p>Real Madrid</p>
+<p>Barcelona</p>
+<p>Manchester City</p>
+<p>Bayern Munich</p>
+</div>
+</div>
+
+<!-- DISCOVER -->
+<div class="tab" id="discover">
+<div class="card">
+<h3>Discover</h3>
+<p>Trending Players</p>
+<p>Young Talents</p>
+<p>Best Coaches</p>
+</div>
 </div>
 
 <!-- GAMES -->
 <div class="tab" id="games">
-
 <div class="card">
 <h3>Penalty Challenge</h3>
 <button onclick="penalty()">Shoot</button>
@@ -163,53 +235,74 @@ margin-top:8px
 
 <div class="card">
 <h3>Guess Score</h3>
-<p>Predict Arsenal vs Chelsea</p>
-<input placeholder="Example 2-1">
-<button onclick="alert('Prediction saved!')">Submit</button>
+<input placeholder="2-1">
+<button onclick="alert('Prediction Saved')">Submit</button>
 </div>
-
-<div class="card">
-<h3>Football Quiz</h3>
-<p>Who won World Cup 2022?</p>
-<button onclick="alert('Argentina')">Show Answer</button>
-</div>
-
 </div>
 
 <!-- NEWS -->
 <div class="tab" id="news">
 <div class="card">
-<h3>Latest Football News</h3>
-<p>Barcelona signs new midfielder.</p>
-<p>Premier League title race intensifies.</p>
-<p>Top striker returns from injury.</p>
+<h3>Latest News</h3>
+<p>Top striker returns.</p>
+<p>Transfer talks begin.</p>
+<p>League race heats up.</p>
+</div>
+</div>
+
+<!-- STORE -->
+<div class="tab" id="store">
+<div class="card">
+<h3>Store</h3>
+<p>Premium Membership</p>
+<p>VIP Predictions</p>
+<button onclick="pay()">Buy with Pi</button>
+</div>
+</div>
+
+<!-- PROFILE -->
+<div class="tab" id="profile">
+<div class="card">
+<h3>Profile</h3>
+<p>User: Guest</p>
+<p>Status: Free Member</p>
+<p>Academy Progress: 0%</p>
 </div>
 </div>
 
 <!-- SETTINGS -->
 <div class="tab" id="settings">
 <div class="card">
-<h3>Language Search</h3>
+<h3>Languages</h3>
 <input placeholder="Search language">
-<p class="small">English, Français, Kiswahili, Kirundi, Español, Português</p>
-</div>
-
-<div class="card">
-<h3>About</h3>
-<p>Socker Academy helps users learn football professionally.</p>
+<p class="small">English, Français, Kiswahili, Kirundi</p>
 </div>
 </div>
 
 </div>
 
-<!-- NAV -->
+<!-- BOTTOM NAV -->
 <div class="bottom-nav">
 <button class="active" onclick="showTab('home',this)">Home</button>
+<button onclick="showTab('fixtures',this)">Fixtures</button>
 <button onclick="showTab('tips',this)">Tips</button>
 <button onclick="showTab('academy',this)">Academy</button>
-<button onclick="showTab('games',this)">Games</button>
-<button onclick="showTab('news',this)">News</button>
-<button onclick="showTab('settings',this)">Settings</button>
+<button onclick="openMore()">More</button>
+</div>
+
+<!-- MORE MENU -->
+<div class="more-menu" id="moreMenu">
+<div class="more-title">More Menu</div>
+
+<div class="menu-item" onclick="openFromMore('club')">🏟 Club</div>
+<div class="menu-item" onclick="openFromMore('discover')">🔍 Discover</div>
+<div class="menu-item" onclick="openFromMore('games')">🎮 Games</div>
+<div class="menu-item" onclick="openFromMore('news')">📰 News</div>
+<div class="menu-item" onclick="openFromMore('store')">🛒 Store</div>
+<div class="menu-item" onclick="openFromMore('profile')">👤 Profile</div>
+<div class="menu-item" onclick="openFromMore('settings')">⚙ Settings</div>
+
+<button class="back-btn" onclick="closeMore()">← Back</button>
 </div>
 
 <script>
@@ -220,41 +313,41 @@ document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
 document.getElementById(id).classList.add('active');
 
 document.querySelectorAll('.bottom-nav button').forEach(b=>b.classList.remove('active'));
-el.classList.add('active');
+if(el) el.classList.add('active');
+closeMore();
+window.scrollTo(0,0);
+}
+
+function openMore(){
+document.getElementById("moreMenu").classList.add("show");
+}
+
+function closeMore(){
+document.getElementById("moreMenu").classList.remove("show");
+}
+
+function openFromMore(id){
+showTab(id,null);
+closeMore();
 }
 
 function lesson(type){
 const box=document.getElementById("lessonBox");
 
 const data={
-tactics:"Tactics: Control space, press wisely, transition quickly, exploit weak flanks.",
-formations:"4-3-3 attack width. 4-4-2 balance. 3-5-2 midfield dominance.",
-attack:"Attack: movement, finishing, one-touch passing, overlaps and crossing.",
-defense:"Defense: compact lines, communication, zonal marking, pressing triggers.",
-midfield:"Midfield: tempo control, passing triangles, support angles, transitions.",
-setpieces:"Corners, free kicks, near-post runs, defensive organization.",
-betting:"Betting IQ: value bets, bankroll control, avoid emotional betting."
+tactics:"Control space, pressing, transitions and width.",
+formations:"4-3-3 attack, 4-4-2 balance, 3-5-2 midfield.",
+attack:"Movement, finishing, crossing and quick passing.",
+defense:"Compact lines, marking and communication.",
+betting:"Use bankroll control. Avoid emotional betting."
 };
 
 box.innerHTML="<h3>"+type.toUpperCase()+"</h3><p>"+data[type]+"</p>";
 
 if(progress<100){
-progress+=15;
+progress+=20;
 document.getElementById("bar").style.width=progress+"%";
 document.getElementById("progressText").innerText=progress+"% Completed";
-}
-}
-
-function quiz(ans){
-if(ans=="right"){
-document.getElementById("quizResult").innerText="Correct! +10%";
-if(progress<100){
-progress+=10;
-document.getElementById("bar").style.width=progress+"%";
-document.getElementById("progressText").innerText=progress+"% Completed";
-}
-}else{
-document.getElementById("quizResult").innerText="Wrong answer.";
 }
 }
 
@@ -264,7 +357,7 @@ document.getElementById("penaltyResult").innerText=r[Math.floor(Math.random()*3)
 }
 
 function pay(){
-alert("Pi Premium Payment Ready. Connect backend to activate real payment.");
+alert("Pi Payment Ready. Connect backend for live payments.");
 }
 </script>
 
