@@ -4,51 +4,72 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Socker Pro</title>
 
+<script src="https://sdk.minepi.com/pi-sdk.js"></script>
+
 <style>
 body{margin:0;font-family:Arial;background:#0b0f19;color:white}
-header{padding:15px;text-align:center;background:#111827;color:#38bdf8}
+header{padding:15px;text-align:center;background:#111827;color:#38bdf8;font-size:20px}
 
 .container{padding:15px}
 
-.tabs{display:flex;overflow-x:auto}
-.tabs div{
+.tab{display:none}
+.active{display:block}
+
+/* leagues scroll */
+.leagues{
+display:flex;
+overflow-x:auto;
+gap:10px;
+margin-bottom:10px;
+}
+.league{
 min-width:140px;
-padding:10px;
-margin-right:10px;
 background:#1f2937;
+padding:10px;
 border-radius:10px;
 text-align:center;
-cursor:pointer
+cursor:pointer;
 }
 
+/* cards */
 .card{
 background:#161b22;
 padding:15px;
 margin-top:10px;
-border-radius:12px
+border-radius:12px;
 }
 
+/* nav */
+.nav{
+position:fixed;
+bottom:0;
+width:100%;
+display:flex;
+justify-content:space-around;
+background:#111827;
+padding:10px;
+}
+.nav button{
+background:#38bdf8;
+border:none;
+padding:10px;
+border-radius:8px;
+}
+
+/* back */
+.back{
+background:#ef4444;
+margin-bottom:10px;
+}
+
+/* button */
 button{
 width:100%;
 padding:12px;
 margin-top:8px;
 border:none;
 border-radius:10px;
-background:#38bdf8
-}
-
-.bottom{
-position:fixed;bottom:0;width:100%;
-display:flex;justify-content:space-around;
-background:#111827;padding:10px
-}
-
-.page{display:none}
-.active{display:block}
-
-.back{
-margin-bottom:10px;
-background:#ef4444
+background:#38bdf8;
 }
 </style>
 </head>
@@ -60,128 +81,9 @@ background:#ef4444
 <div class="container">
 
 <!-- HOME -->
-<div id="home" class="page active">
+<div id="home" class="tab active">
 
-<div class="tabs">
-<div onclick="league('PL')">Premier League</div>
-<div onclick="league('LL')">La Liga</div>
-<div onclick="league('BL')">Bundesliga</div>
-<div onclick="league('SA')">Serie A</div>
-<div onclick="league('L1')">Ligue 1</div>
-</div>
-
-<div class="card" id="leagueContent">
-<h3>Premier League</h3>
-<p>Top teams: Arsenal, Chelsea, Liverpool</p>
-<p>Style: Fast, physical, high intensity football</p>
-</div>
-
-<div class="card">
-<h3>Featured Matches</h3>
-<p>Arsenal vs Chelsea</p>
-<p>Barcelona vs Real Madrid</p>
-</div>
-
-</div>
-
-<!-- FIXTURES -->
-<div id="fixtures" class="page">
-<button class="back" onclick="openPage('home')">← Back</button>
-
-<div class="card">
-<h3>Today Matches</h3>
-<p>18:00 Arsenal vs Chelsea</p>
-<p>20:00 Milan vs Inter</p>
-</div>
-</div>
-
-<!-- DISCOVER -->
-<div id="discover" class="page">
-<button class="back" onclick="openPage('home')">← Back</button>
-
-<div class="card">
-<h3>Predictions</h3>
-<p>Arsenal Win (80%)</p>
-<p>Over 2.5 Goals (75%)</p>
-</div>
-
-<div class="card">
-<h3>How Prediction Works</h3>
-<p>We analyze team form, injuries, past matches and statistics before giving predictions.</p>
-</div>
-
-<div class="card">
-<h3>Trivia</h3>
-<p>Who won 2022 World Cup?</p>
-<button onclick="alert('Argentina')">Answer</button>
-</div>
-
-</div>
-
-<!-- CLUB -->
-<div id="club" class="page">
-<button class="back" onclick="openPage('home')">← Back</button>
-
-<div class="card">
-<h3>Tactics</h3>
-<p>4-3-3: attacking formation with wide play</p>
-<p>4-4-2: balanced defense</p>
-</div>
-
-<div class="card">
-<h3>Lessons</h3>
-<p>Attack: movement & finishing</p>
-<p>Defense: compact lines & pressing</p>
-</div>
-
-</div>
-
-<!-- STORE -->
-<div id="store" class="page">
-<button class="back" onclick="openPage('home')">← Back</button>
-
-<div class="card">
-<h3>Premium Plan</h3>
-<p>Unlock VIP predictions & advanced lessons</p>
-<button onclick="pay()">Pay with Pi</button>
-</div>
-</div>
-
-</div>
-
-<!-- NAV -->
-<div class="bottom">
-<button onclick="openPage('home')">Home</button>
-<button onclick="openPage('store')">Store</button>
-<button onclick="openPage('club')">Club</button>
-<button onclick="openPage('discover')">Discover</button>
-<button onclick="openPage('fixtures')">Fixtures</button>
-</div>
-
-<script>
-function openPage(id){
-document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))
-document.getElementById(id).classList.add('active')
-window.scrollTo(0,0)
-}
-
-function league(l){
-let data={
-PL:"Premier League: Fast & competitive league in England",
-LL:"La Liga: Technical football in Spain",
-BL:"Bundesliga: High scoring league in Germany",
-SA:"Serie A: Tactical Italian football",
-L1:"Ligue 1: French rising talents"
-}
-
-document.getElementById("leagueContent").innerHTML=
-"<h3>"+l+"</h3><p>"+data[l]+"</p>"
-}
-
-function pay(){
-alert("Connect backend to activate Pi payment")
-}
-</script>
-
-</body>
-</html>
+<div class="leagues">
+<div class="league" onclick="league('PL')">Premier League</div>
+<div class="league" onclick="league('LL')">La Liga</div>
+<div class="league
