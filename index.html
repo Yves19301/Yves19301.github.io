@@ -2,17 +2,40 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Socker App</title>
+<title>Socker Pro</title>
 
 <style>
-body{background:#0b0f19;color:white;font-family:Arial;margin:0;padding-bottom:80px}
-header{background:#111827;padding:15px;text-align:center;color:#38bdf8;font-size:22px}
+body{margin:0;font-family:Arial;background:#0b0f19;color:white}
+header{padding:15px;text-align:center;background:#111827;color:#38bdf8}
+
 .container{padding:15px}
-.card{background:#161b22;padding:15px;border-radius:12px;margin-bottom:12px}
-h3{color:#38bdf8}
-button{width:100%;padding:12px;margin-top:8px;border:none;border-radius:10px;background:#38bdf8}
-.tab{display:none}
-.active{display:block}
+
+.tabs{display:flex;overflow-x:auto}
+.tabs div{
+min-width:140px;
+padding:10px;
+margin-right:10px;
+background:#1f2937;
+border-radius:10px;
+text-align:center;
+cursor:pointer
+}
+
+.card{
+background:#161b22;
+padding:15px;
+margin-top:10px;
+border-radius:12px
+}
+
+button{
+width:100%;
+padding:12px;
+margin-top:8px;
+border:none;
+border-radius:10px;
+background:#38bdf8
+}
 
 .bottom{
 position:fixed;bottom:0;width:100%;
@@ -20,94 +43,107 @@ display:flex;justify-content:space-around;
 background:#111827;padding:10px
 }
 
-.more{
-position:fixed;top:0;right:-100%;
-width:100%;height:100%;
-background:#05070d;padding:20px;
-transition:.3s
+.page{display:none}
+.active{display:block}
+
+.back{
+margin-bottom:10px;
+background:#ef4444
 }
-.show{right:0}
 </style>
 </head>
 
 <body>
 
-<header>⚽ Socker App</header>
+<header>⚽ Socker Pro</header>
 
 <div class="container">
 
 <!-- HOME -->
-<div id="home" class="tab active">
-<div class="card">
-<h3>Top Leagues</h3>
-<p>🇬🇧 Premier League</p>
-<p>🇪🇸 La Liga</p>
-<p>🇩🇪 Bundesliga</p>
-<p>🇮🇹 Serie A</p>
-<p>🇫🇷 Ligue 1</p>
+<div id="home" class="page active">
+
+<div class="tabs">
+<div onclick="league('PL')">Premier League</div>
+<div onclick="league('LL')">La Liga</div>
+<div onclick="league('BL')">Bundesliga</div>
+<div onclick="league('SA')">Serie A</div>
+<div onclick="league('L1')">Ligue 1</div>
+</div>
+
+<div class="card" id="leagueContent">
+<h3>Premier League</h3>
+<p>Top teams: Arsenal, Chelsea, Liverpool</p>
+<p>Style: Fast, physical, high intensity football</p>
 </div>
 
 <div class="card">
 <h3>Featured Matches</h3>
-<p>Arsenal vs Chelsea (Premier League)</p>
-<p>Real Madrid vs Barcelona (La Liga)</p>
-<p>Bayern vs Dortmund (Bundesliga)</p>
+<p>Arsenal vs Chelsea</p>
+<p>Barcelona vs Real Madrid</p>
 </div>
+
 </div>
 
 <!-- FIXTURES -->
-<div id="fixtures" class="tab">
+<div id="fixtures" class="page">
+<button class="back" onclick="openPage('home')">← Back</button>
+
 <div class="card">
-<h3>Today Fixtures</h3>
+<h3>Today Matches</h3>
 <p>18:00 Arsenal vs Chelsea</p>
 <p>20:00 Milan vs Inter</p>
-<p>22:00 PSG vs Lyon</p>
 </div>
 </div>
 
-<!-- TIPS -->
-<div id="tips" class="tab">
+<!-- DISCOVER -->
+<div id="discover" class="page">
+<button class="back" onclick="openPage('home')">← Back</button>
+
 <div class="card">
 <h3>Predictions</h3>
-<p>Arsenal Win (Confidence 80%)</p>
+<p>Arsenal Win (80%)</p>
 <p>Over 2.5 Goals (75%)</p>
-<p>Both Teams Score (70%)</p>
 </div>
 
 <div class="card">
-<h3>Analysis</h3>
-<p>Arsenal has strong home form and Chelsea defense is weak.</p>
-</div>
-</div>
-
-<!-- ACADEMY -->
-<div id="academy" class="tab">
-<div class="card">
-<h3>4-3-3 Tactics</h3>
-<p>This formation is used for attacking width. Wingers stretch defense while midfield controls tempo.</p>
+<h3>How Prediction Works</h3>
+<p>We analyze team form, injuries, past matches and statistics before giving predictions.</p>
 </div>
 
 <div class="card">
-<h3>Defense Strategy</h3>
-<p>Stay compact, reduce space, communicate with defenders and press at the right time.</p>
+<h3>Trivia</h3>
+<p>Who won 2022 World Cup?</p>
+<button onclick="alert('Argentina')">Answer</button>
 </div>
+
+</div>
+
+<!-- CLUB -->
+<div id="club" class="page">
+<button class="back" onclick="openPage('home')">← Back</button>
+
+<div class="card">
+<h3>Tactics</h3>
+<p>4-3-3: attacking formation with wide play</p>
+<p>4-4-2: balanced defense</p>
+</div>
+
+<div class="card">
+<h3>Lessons</h3>
+<p>Attack: movement & finishing</p>
+<p>Defense: compact lines & pressing</p>
+</div>
+
 </div>
 
 <!-- STORE -->
-<div id="store" class="tab">
+<div id="store" class="page">
+<button class="back" onclick="openPage('home')">← Back</button>
+
 <div class="card">
 <h3>Premium Plan</h3>
-<p>Unlock VIP predictions + advanced tactics</p>
+<p>Unlock VIP predictions & advanced lessons</p>
 <button onclick="pay()">Pay with Pi</button>
-</div>
-</div>
-
-<!-- PROFILE -->
-<div id="profile" class="tab">
-<div class="card">
-<h3>User Profile</h3>
-<p>Status: Free</p>
-<p>Progress: Beginner</p>
 </div>
 </div>
 
@@ -115,38 +151,35 @@ transition:.3s
 
 <!-- NAV -->
 <div class="bottom">
-<button onclick="openTab('home')">Home</button>
-<button onclick="openTab('fixtures')">Fixtures</button>
-<button onclick="openTab('tips')">Tips</button>
-<button onclick="openTab('academy')">Academy</button>
-<button onclick="openMore()">More</button>
-</div>
-
-<!-- MORE -->
-<div id="more" class="more">
-<h2>More</h2>
-<button onclick="openTab('store')">Store</button>
-<button onclick="openTab('profile')">Profile</button>
-<button onclick="closeMore()">Back</button>
+<button onclick="openPage('home')">Home</button>
+<button onclick="openPage('store')">Store</button>
+<button onclick="openPage('club')">Club</button>
+<button onclick="openPage('discover')">Discover</button>
+<button onclick="openPage('fixtures')">Fixtures</button>
 </div>
 
 <script>
-function openTab(id){
-document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'))
+function openPage(id){
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))
 document.getElementById(id).classList.add('active')
-closeMore()
+window.scrollTo(0,0)
 }
 
-function openMore(){
-document.getElementById("more").classList.add("show")
+function league(l){
+let data={
+PL:"Premier League: Fast & competitive league in England",
+LL:"La Liga: Technical football in Spain",
+BL:"Bundesliga: High scoring league in Germany",
+SA:"Serie A: Tactical Italian football",
+L1:"Ligue 1: French rising talents"
 }
 
-function closeMore(){
-document.getElementById("more").classList.remove("show")
+document.getElementById("leagueContent").innerHTML=
+"<h3>"+l+"</h3><p>"+data[l]+"</p>"
 }
 
 function pay(){
-alert("Connect backend (Render) to enable real Pi payment")
+alert("Connect backend to activate Pi payment")
 }
 </script>
 
