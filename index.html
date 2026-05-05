@@ -1,113 +1,85 @@
-const API_URL = "https://pi-server-3pra.onrender.com";
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pi App</title>
+  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+</head>
 
-// INIT PI SDK
-Pi.init({ version: "2.0" });
+<body>
 
-/* =========================
-   🧪 TEST SERVER
-========================= */
-async function testBackend() {
-  try {
-    const res = await fetch(API_URL + "/");
+  <h2>🚀 Pi App</h2>
 
-    if (!res.ok) {
-      alert("Server error: " + res.status);
-      return;
+  <!-- BUTTONS ZIGOMBA KUGARAGARA -->
+  <button onclick="testBackend()">Test Server</button>
+  <button onclick="loginWithPi()">Login with Pi</button>
+  <button onclick="payWithPi()">Pay with Pi</button>
+
+  <script>
+    const API_URL = "https://pi-server-3pra.onrender.com";
+
+    // INIT PI
+    Pi.init({ version: "2.0" });
+
+    // TEST SERVER
+    async function testBackend() {
+      try {
+        const res = await fetch(API_URL + "/");
+        const data = await res.text();
+        alert(data);
+      } catch (err) {
+        alert("Server error");
+      }
     }
 
-    const data = await res.text();
-    alert("SERVER: " + data);
-
-  } catch (err) {
-    alert("Network error: " + err.message);
-  }
-}
-
-/* =========================
-   🔐 LOGIN WITH PI
-========================= */
-async function loginWithPi() {
-  try {
-    const scopes = ["username", "payments"];
-
-    const auth = await Pi.authenticate(scopes);
-
-    console.log("User:", auth.user);
-    alert("Welcome " + auth.user.username);
-
-  } catch (err) {
-    console.log(err);
-    alert("Login failed");
-  }
-}
-
-/* =========================
-   💰 PAY WITH PI
-========================= */
-async function payWithPi() {
-  try {
-    await Pi.createPayment({
-      amount: 1,
-      memo: "Test payment",
-      metadata: {
-        productId: "item001",
-        time: Date.now()
+    // LOGIN
+    async function loginWithPi() {
+      try {
+        const auth = await Pi.authenticate(["username", "payments"]);
+        alert("Welcome " + auth.user.username);
+      } catch (err) {
+        alert("Login failed");
       }
-    }, {
+    }
 
-      onReadyForServerApproval: async (paymentId) => {
-        console.log("Approving:", paymentId);
+    // PAYMENT
+    async function payWithPi() {
+      try {
+        await Pi.createPayment({
+          amount: 1,
+          memo: "Test payment",
+          metadata: { productId: "item001" }
+        }, {
 
-        try {
-          const res = await fetch(API_URL + "/approve", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ paymentId })
-          });
+          onReadyForServerApproval: async (paymentId) => {
+            await fetch(API_URL + "/approve", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ paymentId })
+            });
+          },
 
-          const data = await res.json();
-          console.log("APPROVE:", data);
-          alert("APPROVE OK");
+          onReadyForServerCompletion: async (paymentId, txid) => {
+            await fetch(API_URL + "/complete", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ paymentId, txid })
+            });
+          },
 
-        } catch (err) {
-          console.log(err);
-          alert("Approve error");
-        }
-      },
+          onCancel: () => {
+            alert("Payment canceled");
+          },
 
-      onReadyForServerCompletion: async (paymentId, txid) => {
-        console.log("Completing:", paymentId, txid);
+          onError: (error) => {
+            alert("Payment error");
+          }
+        });
 
-        try {
-          const res = await fetch(API_URL + "/complete", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ paymentId, txid })
-          });
-
-          const data = await res.json();
-          console.log("COMPLETE:", data);
-          alert("COMPLETE OK");
-
-        } catch (err) {
-          console.log(err);
-          alert("Complete error");
-        }
-      },
-
-      onCancel: (payment) => {
-        console.log("Canceled:", payment);
-        alert("Payment canceled");
-      },
-
-      onError: (error) => {
-        console.log("Error:", error);
-        alert("Payment error");
+      } catch (err) {
+        alert("Fatal error");
       }
-    });
+    }
+  </script>
 
-  } catch (err) {
-    console.log("Fatal:", err);
-    alert("Fatal error");
-  }
-}
+</body>
+</html>
