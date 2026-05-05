@@ -20,10 +20,10 @@
   <script>
     const API_URL = "https://pi-server-3pra.onrender.com";
 
-    // 🔗 INIT PI SDK
+    // INIT PI SDK
     Pi.init({ version: "2.0" });
 
-    // 🧪 TEST BACKEND
+    // TEST BACKEND
     async function testBackend() {
       try {
         const res = await fetch(API_URL + "/");
@@ -34,36 +34,31 @@
       }
     }
 
-    // 🔐 LOGIN WITH PI
+    // LOGIN
     async function loginWithPi() {
       try {
         const scopes = ['username', 'payments'];
-
         const auth = await Pi.authenticate(scopes);
 
-        console.log("User:", auth.user);
         alert("Welcome " + auth.user.username);
-
       } catch (err) {
-        console.log(err);
         alert("Login failed");
       }
     }
 
-    // 💰 PAY WITH PI (FIXED METADATA)
+    // PAYMENT
     async function payWithPi() {
       try {
-        const payment = await Pi.createPayment({
+        await Pi.createPayment({
           amount: 1,
           memo: "Test payment",
           metadata: {
-            productId: "item001",
-            note: "test-payment"
-          } // ✔ ntabwo ari empty
+            productId: "item001"
+          }
         }, {
-          onReadyForServerApproval: async (paymentId) => {
-            console.log("Approving:", paymentId);
 
+          // APPROVE
+          onReadyForServerApproval: async (paymentId) => {
             const res = await fetch(API_URL + "/approve", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -71,12 +66,11 @@
             });
 
             const data = await res.json();
-            console.log("Approve response:", data);
+            alert("APPROVE: " + JSON.stringify(data));
           },
 
+          // COMPLETE
           onReadyForServerCompletion: async (paymentId, txid) => {
-            console.log("Completing:", paymentId, txid);
-
             const res = await fetch(API_URL + "/complete", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -84,22 +78,20 @@
             });
 
             const data = await res.json();
-            console.log("Complete response:", data);
+            alert("COMPLETE: " + JSON.stringify(data));
           },
 
           onCancel: () => {
-            console.log("❌ Payment canceled");
-            alert("Payment canceled");
+            alert("❌ Payment canceled");
           },
 
           onError: (error) => {
-            console.log("🔥 Payment error:", error);
-            alert("Payment error");
+            alert("🔥 Error: " + JSON.stringify(error));
           }
         });
 
       } catch (err) {
-        console.log("Fatal error:", err);
+        alert("Fatal error");
       }
     }
   </script>
