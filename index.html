@@ -54,7 +54,11 @@
           memo: "Test payment",
           metadata: {}
         }, {
-          onReadyForServerApproval: async (paymentId) => {
+          const payment = await Pi.createPayment({
+  amount: 1,
+  memo: "Test payment",
+  metadata: { item: "test-payment" } // ✔ FIX
+}, {: async (paymentId) => {
             console.log("Approving:", paymentId);
 
             const res = await fetch(API_URL + "/approve", {
