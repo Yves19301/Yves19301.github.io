@@ -1,116 +1,99 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Pi App Frontend</title>
-
-  <!-- Pi SDK -->
+  <title>Pi App</title>
   <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-
-  <style>
-    body {
-      font-family: Arial;
-      text-align: center;
-      margin-top: 50px;
-    }
-
-    button {
-      padding: 12px 20px;
-      margin: 10px;
-      cursor: pointer;
-    }
-  </style>
 </head>
 
 <body>
 
-  <h2>🚀 Pi App Dashboard</h2>
+  <h2>🚀 Pi App</h2>
 
-  <!-- 🔗 Backend URL -->
-  <script>
-    const API_URL = "https://pi-server-3pra.onrender.com";
-  </script>
-
-  <!-- 🧪 TEST BACKEND -->
   <button onclick="testBackend()">Test Server</button>
+  <br><br>
 
-  <!-- 🔐 LOGIN WITH PI -->
   <button onclick="loginWithPi()">Login with Pi</button>
+  <br><br>
 
-  <!-- 💰 PAYMENT TEST -->
   <button onclick="payWithPi()">Pay with Pi</button>
 
   <script>
-    // Initialize Pi SDK
+    const API_URL = "https://pi-server-3pra.onrender.com";
+
+    // 🔗 INIT PI
     Pi.init({ version: "2.0" });
 
-    // 🧪 Test backend connection
+    // 🧪 TEST BACKEND
     async function testBackend() {
-      try {
-        const res = await fetch(API_URL + "/");
-        const data = await res.text();
-        alert(data);
-      } catch (err) {
-        alert("Server error");
-      }
+      const res = await fetch(API_URL + "/");
+      const data = await res.text();
+      alert(data);
     }
 
-    // 🔐 Login with Pi
+    // 🔐 LOGIN WITH PI (FIXED)
     async function loginWithPi() {
       try {
         const scopes = ['username', 'payments'];
 
-        const auth = await Pi.authenticate(scopes, onIncompletePaymentFound);
+        const auth = await Pi.authenticate(scopes);
 
         console.log("User:", auth.user);
         alert("Welcome " + auth.user.username);
 
       } catch (err) {
+        console.log(err);
         alert("Login failed");
       }
     }
 
-    // 💰 Pay with Pi (demo payment)
+    // 💰 PAYMENT (DEBUG VERSION)
     async function payWithPi() {
       try {
         const payment = await Pi.createPayment({
           amount: 1,
           memo: "Test payment",
-          metadata: { app: "Pi App" }
+          metadata: {}
         }, {
           onReadyForServerApproval: async (paymentId) => {
-            await fetch(API_URL + "/approve", {
+            console.log("Approving:", paymentId);
+
+            const res = await fetch(API_URL + "/approve", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ paymentId })
             });
+
+            const data = await res.json();
+            console.log("Approve response:", data);
           },
 
           onReadyForServerCompletion: async (paymentId, txid) => {
-            await fetch(API_URL + "/complete", {
+            console.log("Completing:", paymentId, txid);
+
+            const res = await fetch(API_URL + "/complete", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ paymentId, txid })
             });
+
+            const data = await res.json();
+            console.log("Complete response:", data);
           },
 
           onCancel: () => {
-            alert("Payment cancelled");
+            console.log("❌ Payment canceled");
+            alert("Payment canceled");
           },
 
           onError: (error) => {
-            console.log(error);
+            console.log("🔥 Payment error:", error);
             alert("Payment error");
           }
         });
 
       } catch (err) {
-        alert("Payment failed");
+        console.log("Fatal error:", err);
       }
-    }
-
-    function onIncompletePaymentFound(payment) {
-      console.log("Incomplete payment:", payment);
     }
   </script>
 
