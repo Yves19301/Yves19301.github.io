@@ -42,7 +42,7 @@ async function loginWithPi() {
 }
 
 /* =========================
-   💰 PAY WITH PI (FIXED)
+   💰 PAY WITH PI
 ========================= */
 async function payWithPi() {
   try {
@@ -55,7 +55,6 @@ async function payWithPi() {
       }
     }, {
 
-      /* 🔵 APPROVE */
       onReadyForServerApproval: async (paymentId) => {
         console.log("Approving:", paymentId);
 
@@ -76,7 +75,6 @@ async function payWithPi() {
         }
       },
 
-      /* 🔵 COMPLETE */
       onReadyForServerCompletion: async (paymentId, txid) => {
         console.log("Completing:", paymentId, txid);
 
@@ -97,13 +95,11 @@ async function payWithPi() {
         }
       },
 
-      /* ❌ CANCEL */
       onCancel: (payment) => {
         console.log("Canceled:", payment);
         alert("Payment canceled");
       },
 
-      /* 🔥 ERROR */
       onError: (error) => {
         console.log("Error:", error);
         alert("Payment error");
