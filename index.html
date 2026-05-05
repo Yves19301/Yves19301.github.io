@@ -20,17 +20,21 @@
   <script>
     const API_URL = "https://pi-server-3pra.onrender.com";
 
-    // 🔗 INIT PI
+    // 🔗 INIT PI SDK
     Pi.init({ version: "2.0" });
 
     // 🧪 TEST BACKEND
     async function testBackend() {
-      const res = await fetch(API_URL + "/");
-      const data = await res.text();
-      alert(data);
+      try {
+        const res = await fetch(API_URL + "/");
+        const data = await res.text();
+        alert(data);
+      } catch (err) {
+        alert("Server error");
+      }
     }
 
-    // 🔐 LOGIN WITH PI (FIXED)
+    // 🔐 LOGIN WITH PI
     async function loginWithPi() {
       try {
         const scopes = ['username', 'payments'];
@@ -46,19 +50,18 @@
       }
     }
 
-    // 💰 PAYMENT (DEBUG VERSION)
+    // 💰 PAY WITH PI (FIXED METADATA)
     async function payWithPi() {
       try {
         const payment = await Pi.createPayment({
           amount: 1,
           memo: "Test payment",
-          metadata: {}
+          metadata: {
+            productId: "item001",
+            note: "test-payment"
+          } // ✔ ntabwo ari empty
         }, {
-          const payment = await Pi.createPayment({
-  amount: 1,
-  memo: "Test payment",
-  metadata: { item: "test-payment" } // ✔ FIX
-}, {: async (paymentId) => {
+          onReadyForServerApproval: async (paymentId) => {
             console.log("Approving:", paymentId);
 
             const res = await fetch(API_URL + "/approve", {
