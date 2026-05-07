@@ -167,8 +167,100 @@
     }
 
     // UNIVERSAL PURCHASE FUNCTION
-    async function buyItem(itemId, amount, itemName) {
+    async function buyItem() {
+async function buyItem(itemId, amount, itemName) {
 
+  try {
+
+    // Wake server
+    fetch(API_URL + "/");
+
+    const paymentData = {
+      amount: amount,
+      memo: itemName,
+      metadata: {
+        item: itemId,
+        time: Date.now()
+      }
+    };
+
+    const paymentCallbacks = {
+
+      // APPROVE FAST
+      onReadyForServerApproval: function(paymentId) {
+
+        fetch(API_URL + "/approve", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ paymentId })
+        })
+        .then(res => res.json())
+        .then(data => {
+          console.log("APPROVED", data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      },
+
+      // COMPLETE FAST
+      onReadyForServerCompletion: function(paymentId, txid) {
+
+        fetch(API_URL + "/complete", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            paymentId,
+            txid
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+
+          console.log("COMPLETED", data);
+
+          // SAVE PURCHASE
+          localStorage.setItem(itemId, "true");
+
+          // SHOW CONTENT
+          document.getElementById(itemId).style.display = "block";
+
+          alert("🎉 " + itemName + " unlocked!");
+
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      },
+
+      // CANCEL
+      onCancel: function(payment) {
+        console.log(payment);
+        alert("Payment canceled");
+      },
+
+      // ERROR
+      onError: function(error) {
+        console.log(error);
+        alert("Payment error");
+      }
+    };
+
+    await Pi.createPayment(
+      paymentData,
+      paymentCallbacks
+    );
+
+  } catch (err) {
+
+    console.log(err);
+    alert("Fatal error");
+  }
+}
       try {
 
         // WAKE SERVER
