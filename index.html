@@ -4,86 +4,49 @@
   <title>Socker App</title>
 
   <style>
-
-    body {<!-- 🏠 HOME START -->
-<div id="home" style="display:block; font-family:Arial; background:#0f0f0f; color:white; min-height:100vh;">
-
-  <!-- 🔴 TOP BAR -->
-  <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:black;">
-    <div>⚽ Socker App</div>
-    <div style="color:red;font-weight:bold;">🔴 Live (3)</div>
-  </div>
-
-  <!-- 🟢 LEAGUES SCROLLER -->
-  <div style="display:flex;overflow-x:auto;gap:10px;padding:10px;background:#111;">
-
-    <div class="league" onclick="openLeague(this,'premier')"
-      style="min-width:140px;padding:10px;background:green;border-radius:10px;text-align:center;cursor:pointer;">
-      Premier League
-    </div>
-
-    <div class="league" onclick="openLeague(this,'laliga')"
-      style="min-width:140px;padding:10px;background:#222;border-radius:10px;text-align:center;cursor:pointer;">
-      LaLiga
-    </div>
-
-    <div class="league" onclick="openLeague(this,'bundesliga')"
-      style="min-width:140px;padding:10px;background:#222;border-radius:10px;text-align:center;cursor:pointer;">
-      Bundesliga
-    </div>
-
-    <div class="league" onclick="openLeague(this,'seriea')"
-      style="min-width:140px;padding:10px;background:#222;border-radius:10px;text-align:center;cursor:pointer;">
-      Serie A
-    </div>
-
-  </div>
-
-  <!-- 📦 CONTENT -->
-  <div id="content" style="padding:15px;">
-
-    <h3>🏆 Welcome Home</h3>
-    <p>Select a league to see matches</p>
-
-  </div>
-
-</div>
-<!-- 🏠 HOME END -->
+    body {
       margin: 0;
       font-family: Arial;
       background: #0f0f0f;
       color: white;
     }
 
-    /* TOP LIVE BAR */
+    /* TOP BAR */
     .live-bar {
       display: flex;
       justify-content: space-between;
       padding: 10px;
       background: black;
-      color: white;
+      align-items: center;
     }
 
-    .live {
-      color: red;
-      font-weight: bold;
-    }
-
-    /* LEAGUE SCROLLER */
+    /* LEAGUES */
     .leagues {
       display: flex;
       overflow-x: auto;
+      gap: 10px;
       padding: 10px;
-      gap: 15px;
+      background: #111;
     }
 
     .league {
-      min-width: 120px;
+      min-width: 130px;
       padding: 10px;
       background: #222;
       border-radius: 10px;
       text-align: center;
       cursor: pointer;
+      transition: 0.2s;
+    }
+
+    /* ACTIVE GREEN */
+    .active {
+      background: green !important;
+    }
+
+    /* CONTENT */
+    #content {
+      padding: 15px;
     }
 
     /* TABS */
@@ -98,87 +61,86 @@
     }
 
     .tab {
-      color: white;
-      text-align: center;
       font-size: 12px;
       cursor: pointer;
+      color: white;
     }
 
-    .active {
-      color: gold;
+    .hidden {
+      display: none;
     }
-
-    /* BACK BUTTON */
-    .back {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: #222;
-      padding: 5px 10px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
   </style>
 </head>
 
 <body>
 
-<!-- BACK -->
-<div class="back" onclick="goHome()">⬅ Back</div>
-
-<!-- LIVE BAR -->
+<!-- 🔴 TOP BAR -->
 <div class="live-bar">
   <div>⚽ Socker App</div>
-  <div class="live">🔴 Live (3)</div>
+  <div style="color:red;">🔴 Live (3)</div>
 </div>
 
-<!-- HOME -->
+<!-- 🏠 HOME -->
 <div id="home">
 
   <!-- LEAGUES -->
   <div class="leagues">
-    <div class="league" onclick="openLeague('premier')">Premier League</div>
-    <div class="league" onclick="openLeague('laliga')">LaLiga</div>
-    <div class="league" onclick="openLeague('bundesliga')">Bundesliga</div>
-    <div class="league" onclick="openLeague('seriea')">Serie A</div>
+
+    <div class="league active" onclick="openLeague(this,'premier')">Premier League</div>
+    <div class="league" onclick="openLeague(this,'laliga')">LaLiga</div>
+    <div class="league" onclick="openLeague(this,'bundesliga')">Bundesliga</div>
+    <div class="league" onclick="openLeague(this,'seriea')">Serie A</div>
+
   </div>
 
+  <!-- CONTENT -->
   <div id="content">
-    <h3>🔥 Select a league</h3>
+    <h3>🏆 Welcome Home</h3>
+    <p>Select a league</p>
   </div>
 
 </div>
 
-<!-- OTHER TABS -->
-<div id="fixtures" style="display:none;">Fixtures Page</div>
-<div id="store" style="display:none;">Store Page</div>
-<div id="discover" style="display:none;">Discover Page</div>
-<div id="profile" style="display:none;">Profile Page</div>
-<div id="club" style="display:none;">Club Page</div>
+<!-- 📄 OTHER TABS -->
+<div id="fixtures" class="hidden">Fixtures Page</div>
+<div id="store" class="hidden">Store Page</div>
+<div id="discover" class="hidden">Discover Page</div>
+<div id="profile" class="hidden">Profile Page</div>
+<div id="club" class="hidden">Club Page</div>
 
-<!-- TABS NAV -->
+<!-- 🔵 TABS -->
 <div class="tabs">
-
   <div class="tab" onclick="openTab('home')">Home</div>
   <div class="tab" onclick="openTab('fixtures')">Fixtures</div>
   <div class="tab" onclick="openTab('store')">Store</div>
   <div class="tab" onclick="openTab('discover')">Discover</div>
   <div class="tab" onclick="openTab('profile')">Profile</div>
   <div class="tab" onclick="openTab('club')">Club</div>
-
 </div>
 
 <script>
-function openLeague(el, league) {
 
-  // reset colors
-  document.querySelectorAll(".league").forEach(l => {
-    l.style.background = "#222";
+function openTab(tab) {
+
+  const pages = ["home","fixtures","store","discover","profile","club"];
+
+  pages.forEach(p => {
+    document.getElementById(p).classList.add("hidden");
   });
 
-  // active green
-  el.style.background = "green";
+  document.getElementById(tab).classList.remove("hidden");
+}
+
+/* 🔥 LEAGUE SYSTEM */
+function openLeague(el, league) {
+
+  // reset active
+  document.querySelectorAll(".league").forEach(l => {
+    l.classList.remove("active");
+  });
+
+  // set active
+  el.classList.add("active");
 
   const content = document.getElementById("content");
 
@@ -211,41 +173,6 @@ function openLeague(el, league) {
       <h2>🇮🇹 Serie A</h2>
       <p>⚽ Inter 2 - 0 Milan</p>
     `;
-  }
-}
-function openTab(tab) {
-
-  const pages = ["home","fixtures","store","discover","profile","club"];
-
-  pages.forEach(p => {
-    document.getElementById(p).style.display = "none";
-  });
-
-  document.getElementById(tab).style.display = "block";
-}
-
-function goHome() {
-  openTab("home");
-}
-
-function openLeague(league) {
-
-  const content = document.getElementById("content");
-
-  if (league === "premier") {
-    content.innerHTML = "🏆 Premier League Matches";
-  }
-
-  if (league === "laliga") {
-    content.innerHTML = "⚽ LaLiga Matches";
-  }
-
-  if (league === "bundesliga") {
-    content.innerHTML = "🔥 Bundesliga Matches";
-  }
-
-  if (league === "seriea") {
-    content.innerHTML = "🇮🇹 Serie A Matches";
   }
 }
 
