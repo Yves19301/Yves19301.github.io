@@ -170,7 +170,49 @@
 </div>
 
 <script>
+function openLeague(el, league) {
 
+  // reset colors
+  document.querySelectorAll(".league").forEach(l => {
+    l.style.background = "#222";
+  });
+
+  // active green
+  el.style.background = "green";
+
+  const content = document.getElementById("content");
+
+  if (league === "premier") {
+    content.innerHTML = `
+      <h2>🏆 Premier League</h2>
+      <p>⚽ Arsenal 2 - 1 Chelsea</p>
+      <p>⚽ Man City 3 - 0 Liverpool</p>
+      <p>⚽ Spurs 1 - 1 Man United</p>
+    `;
+  }
+
+  if (league === "laliga") {
+    content.innerHTML = `
+      <h2>🇪🇸 LaLiga</h2>
+      <p>⚽ Real Madrid 2 - 0 Barca</p>
+      <p>⚽ Atletico 1 - 1 Sevilla</p>
+    `;
+  }
+
+  if (league === "bundesliga") {
+    content.innerHTML = `
+      <h2>🇩🇪 Bundesliga</h2>
+      <p>⚽ Bayern 3 - 1 Dortmund</p>
+    `;
+  }
+
+  if (league === "seriea") {
+    content.innerHTML = `
+      <h2>🇮🇹 Serie A</h2>
+      <p>⚽ Inter 2 - 0 Milan</p>
+    `;
+  }
+}
 function openTab(tab) {
 
   const pages = ["home","fixtures","store","discover","profile","club"];
