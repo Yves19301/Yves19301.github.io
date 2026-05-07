@@ -1,354 +1,170 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Socker App Store</title>
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+  <title>Socker App</title>
 
   <style>
+
     body {
+      margin: 0;
       font-family: Arial;
-      background: #111;
+      background: #0f0f0f;
       color: white;
-      padding: 20px;
     }
 
-    h1 {
-      color: gold;
+    /* TOP LIVE BAR */
+    .live-bar {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      background: black;
+      color: white;
     }
 
-    .card {
-      background: #1f1f1f;
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 12px;
-    }
-
-    button {
-      padding: 12px 20px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .buy-btn {
-      background: gold;
-      color: black;
+    .live {
+      color: red;
       font-weight: bold;
     }
 
-    .locked {
-      display: none;
-      margin-top: 15px;
-      background: #222;
-      padding: 15px;
-      border-radius: 10px;
+    /* LEAGUE SCROLLER */
+    .leagues {
+      display: flex;
+      overflow-x: auto;
+      padding: 10px;
+      gap: 15px;
     }
+
+    .league {
+      min-width: 120px;
+      padding: 10px;
+      background: #222;
+      border-radius: 10px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    /* TABS */
+    .tabs {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      background: #111;
+      padding: 10px 0;
+    }
+
+    .tab {
+      color: white;
+      text-align: center;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .active {
+      color: gold;
+    }
+
+    /* BACK BUTTON */
+    .back {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: #222;
+      padding: 5px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
   </style>
 </head>
 
 <body>
 
-  <h1>⚽ Socker App Premium Store</h1>
+<!-- BACK -->
+<div class="back" onclick="goHome()">⬅ Back</div>
 
-  <button onclick="loginWithPi()">
-    Login with Pi
-  </button>
+<!-- LIVE BAR -->
+<div class="live-bar">
+  <div>⚽ Socker App</div>
+  <div class="live">🔴 Live (3)</div>
+</div>
 
-  <br><br>
+<!-- HOME -->
+<div id="home">
 
-  <!-- VIP CLUB -->
-  <div class="card">
-    <h2>🔥 VIP Club Pass</h2>
-    <p>Unlock VIP football predictions.</p>
-
-    <button class="buy-btn"
-      onclick="buyItem('vip_pass', 1, 'VIP Club Pass')">
-      Buy - 1 Pi
-    </button>
-
-    <div id="vip_pass" class="locked">
-      ✅ VIP Club Unlocked
-    </div>
+  <!-- LEAGUES -->
+  <div class="leagues">
+    <div class="league" onclick="openLeague('premier')">Premier League</div>
+    <div class="league" onclick="openLeague('laliga')">LaLiga</div>
+    <div class="league" onclick="openLeague('bundesliga')">Bundesliga</div>
+    <div class="league" onclick="openLeague('seriea')">Serie A</div>
   </div>
 
-  <!-- TRAINING LESSONS -->
-  <div class="card">
-    <h2>🏋️ Training Lessons</h2>
-    <p>Professional football training content.</p>
-
-    <button class="buy-btn"
-      onclick="buyItem('training_lessons', 2, 'Training Lessons')">
-      Buy - 2 Pi
-    </button>
-
-    <div id="training_lessons" class="locked">
-      ✅ Training Lessons Unlocked
-    </div>
+  <div id="content">
+    <h3>🔥 Select a league</h3>
   </div>
 
-  <!-- BETTING TACTICS -->
-  <div class="card">
-    <h2>📊 Betting Tactics</h2>
-    <p>Advanced betting strategies.</p>
+</div>
 
-    <button class="buy-btn"
-      onclick="buyItem('betting_tactics', 3, 'Betting Tactics')">
-      Buy - 3 Pi
-    </button>
+<!-- OTHER TABS -->
+<div id="fixtures" style="display:none;">Fixtures Page</div>
+<div id="store" style="display:none;">Store Page</div>
+<div id="discover" style="display:none;">Discover Page</div>
+<div id="profile" style="display:none;">Profile Page</div>
+<div id="club" style="display:none;">Club Page</div>
 
-    <div id="betting_tactics" class="locked">
-      ✅ Betting Tactics Unlocked
-    </div>
-  </div>
+<!-- TABS NAV -->
+<div class="tabs">
 
-  <!-- PREMIUM PREDICTIONS -->
-  <div class="card">
-    <h2>🎯 Premium Predictions</h2>
-    <p>Daily premium football predictions.</p>
+  <div class="tab" onclick="openTab('home')">Home</div>
+  <div class="tab" onclick="openTab('fixtures')">Fixtures</div>
+  <div class="tab" onclick="openTab('store')">Store</div>
+  <div class="tab" onclick="openTab('discover')">Discover</div>
+  <div class="tab" onclick="openTab('profile')">Profile</div>
+  <div class="tab" onclick="openTab('club')">Club</div>
 
-    <button class="buy-btn"
-      onclick="buyItem('premium_predictions', 1, 'Premium Predictions')">
-      Buy - 1 Pi
-    </button>
+</div>
 
-    <div id="premium_predictions" class="locked">
-      ✅ Premium Predictions Unlocked
-    </div>
-  </div>
+<script>
 
-  <script>
+function openTab(tab) {
 
-    const API_URL = "https://pi-server-3pra.onrender.com";
+  const pages = ["home","fixtures","store","discover","profile","club"];
 
-    // INIT PI
-    Pi.init({ version: "2.0" });
+  pages.forEach(p => {
+    document.getElementById(p).style.display = "none";
+  });
 
-    // RESTORE PURCHASES
-    window.onload = function() {
+  document.getElementById(tab).style.display = "block";
+}
 
-      const items = [
-        "vip_pass",
-        "training_lessons",
-        "betting_tactics",
-        "premium_predictions"
-      ];
+function goHome() {
+  openTab("home");
+}
 
-      items.forEach(item => {
+function openLeague(league) {
 
-        const purchased = localStorage.getItem(item);
+  const content = document.getElementById("content");
 
-        if (purchased === "true") {
-          document.getElementById(item).style.display = "block";
-        }
-      });
-    }
+  if (league === "premier") {
+    content.innerHTML = "🏆 Premier League Matches";
+  }
 
-    // LOGIN
-    async function loginWithPi() {
+  if (league === "laliga") {
+    content.innerHTML = "⚽ LaLiga Matches";
+  }
 
-      try {
+  if (league === "bundesliga") {
+    content.innerHTML = "🔥 Bundesliga Matches";
+  }
 
-        const auth = await Pi.authenticate([
-          "username",
-          "payments"
-        ]);
-
-        alert("Welcome " + auth.user.username);
-
-      } catch (err) {
-
-        console.log(err);
-        alert("Login failed");
-      }
-    }
-
-    // UNIVERSAL PURCHASE FUNCTION
-    async function buyItem() {
-async function buyItem(itemId, amount, itemName) {
-
-  try {
-
-    // Wake server
-    fetch(API_URL + "/");
-
-    const paymentData = {
-      amount: amount,
-      memo: itemName,
-      metadata: {
-        item: itemId,
-        time: Date.now()
-      }
-    };
-
-    const paymentCallbacks = {
-
-      // APPROVE FAST
-      onReadyForServerApproval: function(paymentId) {
-
-        fetch(API_URL + "/approve", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ paymentId })
-        })
-        .then(res => res.json())
-        .then(data => {
-          console.log("APPROVED", data);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-      },
-
-      // COMPLETE FAST
-      onReadyForServerCompletion: function(paymentId, txid) {
-
-        fetch(API_URL + "/complete", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            paymentId,
-            txid
-          })
-        })
-        .then(res => res.json())
-        .then(data => {
-
-          console.log("COMPLETED", data);
-
-          // SAVE PURCHASE
-          localStorage.setItem(itemId, "true");
-
-          // SHOW CONTENT
-          document.getElementById(itemId).style.display = "block";
-
-          alert("🎉 " + itemName + " unlocked!");
-
-        })
-        .catch(err => {
-          console.log(err);
-        });
-      },
-
-      // CANCEL
-      onCancel: function(payment) {
-        console.log(payment);
-        alert("Payment canceled");
-      },
-
-      // ERROR
-      onError: function(error) {
-        console.log(error);
-        alert("Payment error");
-      }
-    };
-
-    await Pi.createPayment(
-      paymentData,
-      paymentCallbacks
-    );
-
-  } catch (err) {
-
-    console.log(err);
-    alert("Fatal error");
+  if (league === "seriea") {
+    content.innerHTML = "🇮🇹 Serie A Matches";
   }
 }
-      try {
 
-        // WAKE SERVER
-        await fetch(API_URL + "/");
-
-        await Pi.createPayment({
-
-          amount: amount,
-
-          memo: itemName,
-
-          metadata: {
-            item: itemId
-          }
-
-        }, {
-
-          // APPROVE
-          onReadyForServerApproval: async function(paymentId) {
-
-            const res = await fetch(API_URL + "/approve", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify({ paymentId })
-            });
-
-            const data = await res.json();
-
-            console.log("APPROVE:", data);
-
-            if (!data.success) {
-              alert("Approve failed");
-            }
-          },
-
-          // COMPLETE
-          onReadyForServerCompletion: async function(paymentId, txid) {
-
-            const res = await fetch(API_URL + "/complete", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify({
-                paymentId,
-                txid
-              })
-            });
-
-            const data = await res.json();
-
-            console.log("COMPLETE:", data);
-
-            // SAVE PURCHASE
-            localStorage.setItem(itemId, "true");
-
-            // UNLOCK CONTENT
-            document.getElementById(itemId).style.display = "block";
-
-            alert("🎉 " + itemName + " unlocked successfully!");
-          },
-
-          // CANCEL
-          onCancel: function(payment) {
-
-            console.log(payment);
-            alert("Payment canceled");
-          },
-
-          // ERROR
-          onError: function(error) {
-
-            console.log(error);
-            alert("Payment error");
-          }
-
-        });
-
-      } catch (err) {
-
-        console.log(err);
-        alert("Fatal error");
-      }
-    }
-
-  </script>
+</script>
 
 </body>
 </html>
