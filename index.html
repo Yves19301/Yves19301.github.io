@@ -1,104 +1,248 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Pi App Store</title>
+  <title>Socker App Store</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #111;
+      color: white;
+      padding: 20px;
+    }
+
+    h1 {
+      color: gold;
+    }
+
+    .card {
+      background: #1f1f1f;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .buy-btn {
+      background: gold;
+      color: black;
+      font-weight: bold;
+    }
+
+    .locked {
+      display: none;
+      margin-top: 15px;
+      background: #222;
+      padding: 15px;
+      border-radius: 10px;
+    }
+  </style>
 </head>
 
 <body>
 
-  <h2>🚀 Pi App Store</h2>
+  <h1>⚽ Socker App Premium Store</h1>
 
-  <button onclick="loginWithPi()">Login with Pi</button>
-
-  <br><br>
-
-  <button onclick="buyItem()">Buy Premium Item - 1 Pi</button>
+  <button onclick="loginWithPi()">
+    Login with Pi
+  </button>
 
   <br><br>
 
-  <div id="premiumContent" style="display:none;">
-    <h3>🎉 Premium Item Unlocked</h3>
-    <p>You successfully purchased this content.</p>
+  <!-- VIP CLUB -->
+  <div class="card">
+    <h2>🔥 VIP Club Pass</h2>
+    <p>Unlock VIP football predictions.</p>
+
+    <button class="buy-btn"
+      onclick="buyItem('vip_pass', 1, 'VIP Club Pass')">
+      Buy - 1 Pi
+    </button>
+
+    <div id="vip_pass" class="locked">
+      ✅ VIP Club Unlocked
+    </div>
+  </div>
+
+  <!-- TRAINING LESSONS -->
+  <div class="card">
+    <h2>🏋️ Training Lessons</h2>
+    <p>Professional football training content.</p>
+
+    <button class="buy-btn"
+      onclick="buyItem('training_lessons', 2, 'Training Lessons')">
+      Buy - 2 Pi
+    </button>
+
+    <div id="training_lessons" class="locked">
+      ✅ Training Lessons Unlocked
+    </div>
+  </div>
+
+  <!-- BETTING TACTICS -->
+  <div class="card">
+    <h2>📊 Betting Tactics</h2>
+    <p>Advanced betting strategies.</p>
+
+    <button class="buy-btn"
+      onclick="buyItem('betting_tactics', 3, 'Betting Tactics')">
+      Buy - 3 Pi
+    </button>
+
+    <div id="betting_tactics" class="locked">
+      ✅ Betting Tactics Unlocked
+    </div>
+  </div>
+
+  <!-- PREMIUM PREDICTIONS -->
+  <div class="card">
+    <h2>🎯 Premium Predictions</h2>
+    <p>Daily premium football predictions.</p>
+
+    <button class="buy-btn"
+      onclick="buyItem('premium_predictions', 1, 'Premium Predictions')">
+      Buy - 1 Pi
+    </button>
+
+    <div id="premium_predictions" class="locked">
+      ✅ Premium Predictions Unlocked
+    </div>
   </div>
 
   <script>
+
     const API_URL = "https://pi-server-3pra.onrender.com";
 
     // INIT PI
     Pi.init({ version: "2.0" });
 
-    // AUTO RESTORE PURCHASE
-    window.onload = () => {
-      const purchased = localStorage.getItem("premium");
+    // RESTORE PURCHASES
+    window.onload = function() {
 
-      if (purchased === "true") {
-        document.getElementById("premiumContent").style.display = "block";
-      }
-    };
+      const items = [
+        "vip_pass",
+        "training_lessons",
+        "betting_tactics",
+        "premium_predictions"
+      ];
+
+      items.forEach(item => {
+
+        const purchased = localStorage.getItem(item);
+
+        if (purchased === "true") {
+          document.getElementById(item).style.display = "block";
+        }
+      });
+    }
 
     // LOGIN
     async function loginWithPi() {
+
       try {
-        const auth = await Pi.authenticate(["username", "payments"]);
+
+        const auth = await Pi.authenticate([
+          "username",
+          "payments"
+        ]);
 
         alert("Welcome " + auth.user.username);
 
       } catch (err) {
+
+        console.log(err);
         alert("Login failed");
       }
     }
 
-    // BUY ITEM
-    async function buyItem() {
+    // UNIVERSAL PURCHASE FUNCTION
+    async function buyItem(itemId, amount, itemName) {
 
       try {
 
+        // WAKE SERVER
+        await fetch(API_URL + "/");
+
         await Pi.createPayment({
-          amount: 1,
-          memo: "Premium Item",
+
+          amount: amount,
+
+          memo: itemName,
+
           metadata: {
-            productId: "premium001"
+            item: itemId
           }
+
         }, {
 
           // APPROVE
-          onReadyForServerApproval: async (paymentId) => {
+          onReadyForServerApproval: async function(paymentId) {
 
-            await fetch(API_URL + "/approve", {
+            const res = await fetch(API_URL + "/approve", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json"
               },
               body: JSON.stringify({ paymentId })
             });
+
+            const data = await res.json();
+
+            console.log("APPROVE:", data);
+
+            if (!data.success) {
+              alert("Approve failed");
+            }
           },
 
           // COMPLETE
-          onReadyForServerCompletion: async (paymentId, txid) => {
+          onReadyForServerCompletion: async function(paymentId, txid) {
 
-            await fetch(API_URL + "/complete", {
+            const res = await fetch(API_URL + "/complete", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json"
               },
-              body: JSON.stringify({ paymentId, txid })
+              body: JSON.stringify({
+                paymentId,
+                txid
+              })
             });
 
+            const data = await res.json();
+
+            console.log("COMPLETE:", data);
+
             // SAVE PURCHASE
-            localStorage.setItem("premium", "true");
+            localStorage.setItem(itemId, "true");
 
-            // UNLOCK ITEM
-            document.getElementById("premiumContent").style.display = "block";
+            // UNLOCK CONTENT
+            document.getElementById(itemId).style.display = "block";
 
-            alert("🎉 Purchase successful!");
+            alert("🎉 " + itemName + " unlocked successfully!");
           },
 
-          onCancel: () => {
+          // CANCEL
+          onCancel: function(payment) {
+
+            console.log(payment);
             alert("Payment canceled");
           },
 
-          onError: (error) => {
+          // ERROR
+          onError: function(error) {
+
             console.log(error);
             alert("Payment error");
           }
@@ -106,10 +250,12 @@
         });
 
       } catch (err) {
+
         console.log(err);
         alert("Fatal error");
       }
     }
+
   </script>
 
 </body>
