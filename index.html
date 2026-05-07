@@ -1,18 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Pi App</title>
+  <title>Pi App Store</title>
   <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 </head>
 
 <body>
 
-  <h2>🚀 Pi App</h2>
+  <h2>🚀 Pi App Store</h2>
 
-  <!-- BUTTONS ZIGOMBA KUGARAGARA -->
-  <button onclick="testBackend()">Test Server</button>
   <button onclick="loginWithPi()">Login with Pi</button>
-  <button onclick="payWithPi()">Pay with Pi</button>
+
+  <br><br>
+
+  <button onclick="buyItem()">Buy Premium Item - 1 Pi</button>
+
+  <br><br>
+
+  <div id="premiumContent" style="display:none;">
+    <h3>🎉 Premium Item Unlocked</h3>
+    <p>You successfully purchased this content.</p>
+  </div>
 
   <script>
     const API_URL = "https://pi-server-3pra.onrender.com";
@@ -20,50 +28,70 @@
     // INIT PI
     Pi.init({ version: "2.0" });
 
-    // TEST SERVER
-    async function testBackend() {
-      try {
-        const res = await fetch(API_URL + "/");
-        const data = await res.text();
-        alert(data);
-      } catch (err) {
-        alert("Server error");
+    // AUTO RESTORE PURCHASE
+    window.onload = () => {
+      const purchased = localStorage.getItem("premium");
+
+      if (purchased === "true") {
+        document.getElementById("premiumContent").style.display = "block";
       }
-    }
+    };
 
     // LOGIN
     async function loginWithPi() {
       try {
         const auth = await Pi.authenticate(["username", "payments"]);
+
         alert("Welcome " + auth.user.username);
+
       } catch (err) {
         alert("Login failed");
       }
     }
 
-    // PAYMENT
-    async function payWithPi() {
+    // BUY ITEM
+    async function buyItem() {
+
       try {
+
         await Pi.createPayment({
           amount: 1,
-          memo: "Test payment",
-          metadata: { productId: "item001" }
+          memo: "Premium Item",
+          metadata: {
+            productId: "premium001"
+          }
         }, {
 
+          // APPROVE
           onReadyForServerApproval: async (paymentId) => {
+
             await fetch(API_URL + "/approve", {
               method: "POST",
-              headers: { "Content-Type": "application/json" },
+              headers: {
+                "Content-Type": "application/json"
+              },
               body: JSON.stringify({ paymentId })
             });
           },
 
+          // COMPLETE
           onReadyForServerCompletion: async (paymentId, txid) => {
+
             await fetch(API_URL + "/complete", {
               method: "POST",
-              headers: { "Content-Type": "application/json" },
+              headers: {
+                "Content-Type": "application/json"
+              },
               body: JSON.stringify({ paymentId, txid })
             });
+
+            // SAVE PURCHASE
+            localStorage.setItem("premium", "true");
+
+            // UNLOCK ITEM
+            document.getElementById("premiumContent").style.display = "block";
+
+            alert("🎉 Purchase successful!");
           },
 
           onCancel: () => {
@@ -71,11 +99,14 @@
           },
 
           onError: (error) => {
+            console.log(error);
             alert("Payment error");
           }
+
         });
 
       } catch (err) {
+        console.log(err);
         alert("Fatal error");
       }
     }
