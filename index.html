@@ -6,7 +6,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
+.leagues{
+  display:flex;
+  overflow-x:auto;
+  gap:10px;
+  padding:15px;
+}
 
+.leagues::-webkit-scrollbar{
+  display:none;
+}
+
+.league{
+  min-width:140px;
+  background:#1a2238;
+  padding:12px;
+  border-radius:14px;
+  text-align:center;
+  font-weight:bold;
+  color:white;
+}
+
+.activeLeague{
+  background:#19d36b;
+  color:black;
+}
     * {
       margin: 0;
       padding: 0;
