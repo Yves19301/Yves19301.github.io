@@ -3,180 +3,384 @@
 <head>
   <title>Socker App</title>
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
-    body {
+
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #050816;
       font-family: Arial;
-      background: #0f0f0f;
       color: white;
+      padding-bottom: 90px;
     }
 
     /* TOP BAR */
-    .live-bar {
+    .topbar {
       display: flex;
       justify-content: space-between;
-      padding: 10px;
-      background: black;
       align-items: center;
+      padding: 18px;
+      background: #0b1020;
+      border-bottom: 1px solid #1b2238;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .shield {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: #18d26e;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+      color: black;
+      font-weight: bold;
+    }
+
+    .title {
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    /* NOTIFICATION */
+    .notification {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #11192d;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .dot {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #18d26e;
     }
 
     /* LEAGUES */
     .leagues {
       display: flex;
       overflow-x: auto;
-      gap: 10px;
-      padding: 10px;
-      background: #111;
+      gap: 12px;
+      padding: 18px;
+      scrollbar-width: none;
+    }
+
+    .leagues::-webkit-scrollbar {
+      display: none;
     }
 
     .league {
-      min-width: 130px;
-      padding: 10px;
-      background: #222;
-      border-radius: 10px;
+      min-width: 150px;
+      background: #141c31;
+      color: white;
+      padding: 14px;
+      border-radius: 18px;
       text-align: center;
       cursor: pointer;
+      font-weight: bold;
       transition: 0.2s;
     }
 
-    /* ACTIVE GREEN */
     .active {
-      background: green !important;
+      background: #18d26e;
+      color: black;
     }
 
-    /* CONTENT */
-    #content {
-      padding: 15px;
+    /* LIVE HEADER */
+    .live-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 18px;
+      margin-top: 10px;
+      margin-bottom: 18px;
     }
 
-    /* TABS */
+    .live-title {
+      font-size: 26px;
+      font-weight: bold;
+    }
+
+    .live-badge {
+      background: #ff3b5c;
+      padding: 10px 16px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    /* MATCH CARD */
+    .match-card {
+      background: #11192d;
+      margin: 18px;
+      border-radius: 28px;
+      padding: 22px;
+      border: 1px solid #1f2942;
+    }
+
+    .league-name {
+      color: #a4adc6;
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+
+    .match-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .team {
+      width: 32%;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .score {
+      width: 20%;
+      text-align: center;
+      font-size: 56px;
+      font-weight: bold;
+    }
+
+    .minute {
+      color: #ff4a6a;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-align: right;
+    }
+
+    .stadium {
+      margin-top: 20px;
+      color: #8d96ad;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #1d2640;
+      padding-top: 14px;
+    }
+
+    .details {
+      color: #18d26e;
+      font-weight: bold;
+    }
+
+    /* BOTTOM NAV */
     .tabs {
       position: fixed;
       bottom: 0;
       width: 100%;
+      background: #0b1020;
       display: flex;
       justify-content: space-around;
-      background: #111;
-      padding: 10px 0;
+      padding: 14px 0;
+      border-top: 1px solid #1d2640;
     }
 
     .tab {
-      font-size: 12px;
+      text-align: center;
+      color: #9aa3bb;
+      font-size: 13px;
       cursor: pointer;
-      color: white;
     }
 
-    .hidden {
-      display: none;
+    .tab.active-tab {
+      color: #18d26e;
+      font-weight: bold;
     }
+
   </style>
 </head>
 
 <body>
 
-<!-- 🔴 TOP BAR -->
-<div class="live-bar">
-  <div>⚽ Socker App</div>
-  <div style="color:red;">🔴 Live (3)</div>
-</div>
+  <!-- TOP BAR -->
+  <div class="topbar">
 
-<!-- 🏠 HOME -->
-<div id="home">
+    <div class="logo">
+      <div class="shield">⚽</div>
+      <div class="title">SOCKER</div>
+    </div>
+
+    <!-- NOTIFICATION -->
+    <div class="notification">
+      🔔
+      <div class="dot"></div>
+    </div>
+
+  </div>
 
   <!-- LEAGUES -->
   <div class="leagues">
 
-    <div class="league active" onclick="openLeague(this,'premier')">Premier League</div>
-    <div class="league" onclick="openLeague(this,'laliga')">LaLiga</div>
-    <div class="league" onclick="openLeague(this,'bundesliga')">Bundesliga</div>
-    <div class="league" onclick="openLeague(this,'seriea')">Serie A</div>
+    <div class="league active">
+      Premier League
+    </div>
+
+    <div class="league">
+      LaLiga
+    </div>
+
+    <div class="league">
+      Bundesliga
+    </div>
+
+    <div class="league">
+      Serie A
+    </div>
+
+    <div class="league">
+      Ligue 1
+    </div>
 
   </div>
 
-  <!-- CONTENT -->
-  <div id="content">
-    <h3>🏆 Welcome Home</h3>
-    <p>Select a league</p>
+  <!-- LIVE HEADER -->
+  <div class="live-header">
+    <div class="live-title">🔴 LIVE NOW</div>
+    <div class="live-badge">3 LIVE</div>
   </div>
 
-</div>
+  <!-- MATCH 1 -->
+  <div class="match-card">
 
-<!-- 📄 OTHER TABS -->
-<div id="fixtures" class="hidden">Fixtures Page</div>
-<div id="store" class="hidden">Store Page</div>
-<div id="discover" class="hidden">Discover Page</div>
-<div id="profile" class="hidden">Profile Page</div>
-<div id="club" class="hidden">Club Page</div>
+    <div class="league-name">Premier League</div>
 
-<!-- 🔵 TABS -->
-<div class="tabs">
-  <div class="tab" onclick="openTab('home')">Home</div>
-  <div class="tab" onclick="openTab('fixtures')">Fixtures</div>
-  <div class="tab" onclick="openTab('store')">Store</div>
-  <div class="tab" onclick="openTab('discover')">Discover</div>
-  <div class="tab" onclick="openTab('profile')">Profile</div>
-  <div class="tab" onclick="openTab('club')">Club</div>
-</div>
+    <div class="minute">78'</div>
 
-<script>
+    <div class="match-row">
 
-function openTab(tab) {
+      <div class="team">
+        Manchester City
+      </div>
 
-  const pages = ["home","fixtures","store","discover","profile","club"];
+      <div class="score">
+        2 : 1
+      </div>
 
-  pages.forEach(p => {
-    document.getElementById(p).classList.add("hidden");
-  });
+      <div class="team" style="text-align:right;">
+        Liverpool
+      </div>
 
-  document.getElementById(tab).classList.remove("hidden");
-}
+    </div>
 
-/* 🔥 LEAGUE SYSTEM */
-function openLeague(el, league) {
+    <div class="stadium">
+      <div>📍 Etihad Stadium</div>
+      <div class="details">Details ></div>
+    </div>
 
-  // reset active
-  document.querySelectorAll(".league").forEach(l => {
-    l.classList.remove("active");
-  });
+  </div>
 
-  // set active
-  el.classList.add("active");
+  <!-- MATCH 2 -->
+  <div class="match-card">
 
-  const content = document.getElementById("content");
+    <div class="league-name">LaLiga</div>
 
-  if (league === "premier") {
-    content.innerHTML = `
-      <h2>🏆 Premier League</h2>
-      <p>⚽ Arsenal 2 - 1 Chelsea</p>
-      <p>⚽ Man City 3 - 0 Liverpool</p>
-      <p>⚽ Spurs 1 - 1 Man United</p>
-    `;
-  }
+    <div class="minute">45+2'</div>
 
-  if (league === "laliga") {
-    content.innerHTML = `
-      <h2>🇪🇸 LaLiga</h2>
-      <p>⚽ Real Madrid 2 - 0 Barca</p>
-      <p>⚽ Atletico 1 - 1 Sevilla</p>
-    `;
-  }
+    <div class="match-row">
 
-  if (league === "bundesliga") {
-    content.innerHTML = `
-      <h2>🇩🇪 Bundesliga</h2>
-      <p>⚽ Bayern 3 - 1 Dortmund</p>
-    `;
-  }
+      <div class="team">
+        Barcelona
+      </div>
 
-  if (league === "seriea") {
-    content.innerHTML = `
-      <h2>🇮🇹 Serie A</h2>
-      <p>⚽ Inter 2 - 0 Milan</p>
-    `;
-  }
-}
+      <div class="score">
+        1 : 1
+      </div>
 
-</script>
+      <div class="team" style="text-align:right;">
+        Real Madrid
+      </div>
+
+    </div>
+
+    <div class="stadium">
+      <div>📍 Spotify Camp Nou</div>
+      <div class="details">Details ></div>
+    </div>
+
+  </div>
+
+  <!-- MATCH 3 -->
+  <div class="match-card">
+
+    <div class="league-name">Bundesliga</div>
+
+    <div class="minute">FT</div>
+
+    <div class="match-row">
+
+      <div class="team">
+        Bayern Munich
+      </div>
+
+      <div class="score">
+        3 : 0
+      </div>
+
+      <div class="team" style="text-align:right;">
+        Dortmund
+      </div>
+
+    </div>
+
+    <div class="stadium">
+      <div>📍 Allianz Arena</div>
+      <div class="details">Details ></div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="tabs">
+
+    <div class="tab active-tab">
+      🟢<br>
+      HOME
+    </div>
+
+    <div class="tab">
+      📅<br>
+      FIXTURES
+    </div>
+
+    <div class="tab">
+      🛡️<br>
+      CLUB
+    </div>
+
+    <div class="tab">
+      🛒<br>
+      STORE
+    </div>
+
+    <div class="tab">
+      👤<br>
+      PROFILE
+    </div>
+
+  </div>
 
 </body>
 </html>
