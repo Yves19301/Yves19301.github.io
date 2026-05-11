@@ -5,7 +5,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- ================= CSS START ================= -->
+  <!-- CSS START -->
   <style>
 
     *{
@@ -101,7 +101,6 @@
       text-align:center;
       cursor:pointer;
       font-weight:bold;
-      transition:0.2s;
     }
 
     .activeLeague{
@@ -166,4 +165,349 @@
     .score{
       width:20%;
       text-align:center;
-      font-size:
+      font-size:40px;
+      font-weight:bold;
+    }
+
+    .stadium{
+      margin-top:18px;
+      padding-top:14px;
+      border-top:1px solid #1d2640;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      color:#8d96ad;
+    }
+
+    .details{
+      color:#18d26e;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    /* PAGES */
+    .page{
+      display:none;
+      padding:20px;
+    }
+
+    .activePage{
+      display:block;
+    }
+
+    /* BOTTOM TABS */
+    .tabs{
+      position:fixed;
+      bottom:0;
+      width:100%;
+      background:#0b1020;
+      display:flex;
+      justify-content:space-around;
+      padding:14px 0;
+      border-top:1px solid #1d2640;
+    }
+
+    .tab{
+      text-align:center;
+      color:#9aa3bb;
+      font-size:13px;
+      cursor:pointer;
+    }
+
+    .activeTab{
+      color:#18d26e;
+      font-weight:bold;
+    }
+
+    /* DETAILS PAGE */
+    .backBtn{
+      background:#18d26e;
+      color:black;
+      border:none;
+      padding:10px 16px;
+      border-radius:12px;
+      margin-bottom:20px;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+  </style>
+  <!-- CSS END -->
+
+</head>
+
+<body>
+
+<!-- HOME PAGE START -->
+<div id="homePage" class="activePage">
+
+  <!-- TOPBAR START -->
+  <div class="topbar">
+
+    <div class="logo">
+      <div class="shield">⚽</div>
+      <div class="title">SOCKER</div>
+    </div>
+
+    <div class="notification" onclick="openNotifications()">
+      🔔
+      <div class="dot"></div>
+    </div>
+
+  </div>
+  <!-- TOPBAR END -->
+
+  <!-- LEAGUES START -->
+  <div class="leagues">
+
+    <div class="league activeLeague" onclick="selectLeague(this,'Premier League')">
+      Premier League
+    </div>
+
+    <div class="league" onclick="selectLeague(this,'LaLiga')">
+      LaLiga
+    </div>
+
+    <div class="league" onclick="selectLeague(this,'Bundesliga')">
+      Bundesliga
+    </div>
+
+    <div class="league" onclick="selectLeague(this,'Serie A')">
+      Serie A
+    </div>
+
+    <div class="league" onclick="selectLeague(this,'Ligue 1')">
+      Ligue 1
+    </div>
+
+  </div>
+  <!-- LEAGUES END -->
+
+  <!-- LIVE HEADER -->
+  <div class="live-header">
+    <div class="live-title">🔴 LIVE NOW</div>
+    <div class="live-badge">3 LIVE</div>
+  </div>
+
+  <!-- MATCHES START -->
+
+  <!-- MATCH 1 -->
+  <div class="match-card">
+
+    <div class="league-name">Premier League</div>
+
+    <div class="minute">78'</div>
+
+    <div class="match-row">
+
+      <div class="team">
+        Manchester City
+      </div>
+
+      <div class="score">
+        2 : 1
+      </div>
+
+      <div class="team" style="text-align:right;">
+        Liverpool
+      </div>
+
+    </div>
+
+    <div class="stadium">
+
+      <div>📍 Etihad Stadium</div>
+
+      <div class="details"
+      onclick="openDetails(
+      'Manchester City vs Liverpool',
+      '2 : 1',
+      'Etihad Stadium',
+      '78'
+      )">
+        Details >
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- MATCH 2 -->
+  <div class="match-card">
+
+    <div class="league-name">LaLiga</div>
+
+    <div class="minute">45+2'</div>
+
+    <div class="match-row">
+
+      <div class="team">
+        Barcelona
+      </div>
+
+      <div class="score">
+        1 : 1
+      </div>
+
+      <div class="team" style="text-align:right;">
+        Real Madrid
+      </div>
+
+    </div>
+
+    <div class="stadium">
+
+      <div>📍 Camp Nou</div>
+
+      <div class="details"
+      onclick="openDetails(
+      'Barcelona vs Real Madrid',
+      '1 : 1',
+      'Camp Nou',
+      '45+2'
+      )">
+        Details >
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- MATCHES END -->
+
+</div>
+<!-- HOME PAGE END -->
+
+<!-- DETAILS PAGE START -->
+<div id="detailsPage" class="page">
+
+  <button class="backBtn" onclick="goHome()">
+    ⬅ Back
+  </button>
+
+  <h1 id="detailsTitle"></h1>
+
+  <h2 id="detailsScore" style="margin-top:20px;"></h2>
+
+  <p id="detailsMinute" style="margin-top:20px;"></p>
+
+  <p id="detailsStadium" style="margin-top:10px;"></p>
+
+</div>
+<!-- DETAILS PAGE END -->
+
+<!-- FIXTURES PAGE START -->
+<div id="fixturesPage" class="page">
+  <h1>📅 Fixtures Page</h1>
+</div>
+<!-- FIXTURES PAGE END -->
+
+<!-- CLUB PAGE START -->
+<div id="clubPage" class="page">
+  <h1>🛡️ Club Page</h1>
+</div>
+<!-- CLUB PAGE END -->
+
+<!-- STORE PAGE START -->
+<div id="storePage" class="page">
+  <h1>🛒 Store Page</h1>
+</div>
+<!-- STORE PAGE END -->
+
+<!-- PROFILE PAGE START -->
+<div id="profilePage" class="page">
+  <h1>👤 Profile Page</h1>
+</div>
+<!-- PROFILE PAGE END -->
+
+<!-- TABS START -->
+<div class="tabs">
+
+  <div class="tab activeTab" onclick="openTab(this,'homePage')">
+    🏠<br>HOME
+  </div>
+
+  <div class="tab" onclick="openTab(this,'fixturesPage')">
+    📅<br>FIXTURES
+  </div>
+
+  <div class="tab" onclick="openTab(this,'clubPage')">
+    🛡️<br>CLUB
+  </div>
+
+  <div class="tab" onclick="openTab(this,'storePage')">
+    🛒<br>STORE
+  </div>
+
+  <div class="tab" onclick="openTab(this,'profilePage')">
+    👤<br>PROFILE
+  </div>
+
+</div>
+<!-- TABS END -->
+
+<!-- JS START -->
+<script>
+
+function openNotifications(){
+  alert("Notifications");
+}
+
+function selectLeague(el,name){
+
+  document.querySelectorAll(".league").forEach(item=>{
+    item.classList.remove("activeLeague");
+  });
+
+  el.classList.add("activeLeague");
+}
+
+function openDetails(title,score,stadium,minute){
+
+  hidePages();
+
+  document.getElementById("detailsPage").classList.add("activePage");
+
+  document.getElementById("detailsTitle").innerHTML = title;
+
+  document.getElementById("detailsScore").innerHTML = score;
+
+  document.getElementById("detailsMinute").innerHTML =
+  "⏱ Minute: " + minute;
+
+  document.getElementById("detailsStadium").innerHTML =
+  "📍 Stadium: " + stadium;
+}
+
+function goHome(){
+
+  hidePages();
+
+  document.getElementById("homePage").classList.add("activePage");
+}
+
+function openTab(el,page){
+
+  hidePages();
+
+  document.getElementById(page).classList.add("activePage");
+
+  document.querySelectorAll(".tab").forEach(tab=>{
+    tab.classList.remove("activeTab");
+  });
+
+  el.classList.add("activeTab");
+}
+
+function hidePages(){
+
+  document.querySelectorAll(".activePage").forEach(page=>{
+    page.classList.remove("activePage");
+  });
+}
+
+</script>
+<!-- JS END -->
+
+</body>
+</html>
