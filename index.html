@@ -448,7 +448,11 @@
 
 <!-- JS START -->
 <script>
-
+try {
+  Pi.init({ version: "2.0", sandbox: true });
+} catch(e) {
+  console.log("Pi SDK not available:", e.message);
+}
 function openNotifications(){
   alert("Notifications");
 }
