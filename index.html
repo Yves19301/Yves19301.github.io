@@ -2,41 +2,215 @@
 <html>
 <head>
   <title>Socker App</title>
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- CSS START -->
   <style>
-    *{margin:0;padding:0;box-sizing:border-box;}
-    body{background:#050816;font-family:Arial;color:white;padding-bottom:80px;}
 
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      background:#050816;
+      font-family:Arial;
+      color:white;
+      padding-bottom:90px;
+    }
+
+    /* TOP BAR */
     .topbar{
       display:flex;
       justify-content:space-between;
       align-items:center;
-      padding:15px;
+      padding:18px;
       background:#0b1020;
       border-bottom:1px solid #1b2238;
     }
 
-    .title{font-size:24px;font-weight:bold;}
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
 
-    .page{display:none;padding:15px;}
-    .activePage{display:block;}
+    .shield{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      background:#18d26e;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      font-size:20px;
+      color:black;
+      font-weight:bold;
+    }
 
+    .title{
+      font-size:28px;
+      font-weight:bold;
+    }
+
+    /* NOTIFICATION */
+    .notification{
+      width:44px;
+      height:44px;
+      border-radius:50%;
+      background:#11192d;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      position:relative;
+      cursor:pointer;
+      font-size:20px;
+    }
+
+    .dot{
+      position:absolute;
+      top:8px;
+      right:10px;
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:#18d26e;
+    }
+
+    /* LEAGUES */
+    .leagues{
+      display:flex;
+      overflow-x:auto;
+      gap:12px;
+      padding:18px;
+      scrollbar-width:none;
+    }
+
+    .leagues::-webkit-scrollbar{
+      display:none;
+    }
+
+    .league{
+      min-width:150px;
+      background:#141c31;
+      color:white;
+      padding:14px;
+      border-radius:18px;
+      text-align:center;
+      cursor:pointer;
+      font-weight:bold;
+    }
+
+    .activeLeague{
+      background:#18d26e;
+      color:black;
+    }
+
+    /* LIVE HEADER */
+    .live-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:0 18px;
+      margin-bottom:15px;
+    }
+
+    .live-title{
+      font-size:24px;
+      font-weight:bold;
+    }
+
+    .live-badge{
+      background:#ff3b5c;
+      padding:10px 15px;
+      border-radius:20px;
+      font-weight:bold;
+    }
+
+    /* MATCH CARD */
+    .match-card{
+      background:#11192d;
+      margin:18px;
+      border-radius:24px;
+      padding:22px;
+      border:1px solid #1f2942;
+    }
+
+    .league-name{
+      color:#9aa3bb;
+      margin-bottom:12px;
+    }
+
+    .minute{
+      color:#ff4a6a;
+      text-align:right;
+      font-weight:bold;
+      margin-bottom:10px;
+    }
+
+    .match-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    .team{
+      width:35%;
+      font-size:18px;
+      font-weight:bold;
+    }
+
+    .score{
+      width:20%;
+      text-align:center;
+      font-size:40px;
+      font-weight:bold;
+    }
+
+    .stadium{
+      margin-top:18px;
+      padding-top:14px;
+      border-top:1px solid #1d2640;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      color:#8d96ad;
+    }
+
+    .details{
+      color:#18d26e;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    /* PAGES */
+    .page{
+      display:none;
+      padding:20px;
+    }
+
+    .activePage{
+      display:block;
+    }
+
+    /* BOTTOM TABS */
     .tabs{
       position:fixed;
       bottom:0;
       width:100%;
+      background:#0b1020;
       display:flex;
       justify-content:space-around;
-      background:#0b1020;
-      padding:12px 0;
-      border-top:1px solid #1b2238;
+      padding:14px 0;
+      border-top:1px solid #1d2640;
     }
 
     .tab{
+      text-align:center;
       color:#9aa3bb;
       font-size:13px;
-      text-align:center;
       cursor:pointer;
     }
 
@@ -45,111 +219,463 @@
       font-weight:bold;
     }
 
-    .card{
-      background:#11192d;
-      padding:15px;
-      margin:10px 0;
-      border-radius:12px;
-    }
-
-    .btn{
-      padding:10px 15px;
+    /* DETAILS PAGE */
+    .backBtn{
       background:#18d26e;
+      color:black;
       border:none;
-      border-radius:10px;
+      padding:10px 16px;
+      border-radius:12px;
+      margin-bottom:20px;
       font-weight:bold;
       cursor:pointer;
-      margin-top:10px;
     }
+
   </style>
+  <!-- CSS END -->
+
 </head>
 
 <body>
 
-<!-- HOME -->
-<div id="homePage" class="page activePage">
+<!-- HOME PAGE START -->
+<div id="homePage" class="activePage">
 
+  <!-- TOPBAR START -->
   <div class="topbar">
-    <div class="title">SOCKER ⚽</div>
+
+    <div class="logo">
+      <div class="shield">⚽</div>
+      <div class="title">SOCKER</div>
+    </div>
+
+    <div class="notification" onclick="openNotifications()">
+      🔔
+      <div class="dot"></div>
+    </div>
+
+  </div>
+  <!-- TOPBAR END -->
+
+  <!-- LEAGUES START -->
+  <div class="leagues">
+
+    <div class="league activeLeague" onclick="selectLeague(this,'Premier League')">
+      Premier League
+    </div>
+
+    <div class="league" onclick="selectLeague(this,'LaLiga')">
+      LaLiga
+    </div>
+
+    <div class="league" onclick="selectLeague(this,'Bundesliga')">
+      Bundesliga
+    </div>
+
+    <div class="league" onclick="selectLeague(this,'Serie A')">
+      Serie A
+    </div>
+
+    <div class="league" onclick="selectLeague(this,'Ligue 1')">
+      Ligue 1
+    </div>
+
+  </div>
+  <!-- LEAGUES END -->
+
+  <!-- LIVE HEADER -->
+  <div class="live-header">
+    <div class="live-title">🔴 LIVE NOW</div>
+    <div class="live-badge">3 LIVE</div>
   </div>
 
-  <div class="card">
-    🔴 Live Match
-    <br><br>
-    Manchester City vs Liverpool
+  <!-- MATCHES START -->
+
+  <!-- MATCH 1 -->
+  <div class="match-card">
+
+    <div class="league-name">Premier League</div>
+
+    <div class="minute">78'</div>
+
+    <div class="match-row">
+
+      <div class="team">
+        Manchester City
+      </div>
+
+      <div class="score">
+        2 : 1
+      </div>
+
+      <div class="team" style="text-align:right;">
+        Liverpool
+      </div>
+
+    </div>
+
+    <div class="stadium">
+
+      <div>📍 Etihad Stadium</div>
+
+      <div class="details"
+      onclick="openDetails(
+      'Manchester City vs Liverpool',
+      '2 : 1',
+      'Etihad Stadium',
+      '78'
+      )">
+        Details >
+      </div>
+
+    </div>
+
   </div>
 
-  <div class="card">
-    📊 Premier League Updates
+  <!-- MATCH 2 -->
+  <div class="match-card">
+
+    <div class="league-name">LaLiga</div>
+
+    <div class="minute">45+2'</div>
+
+    <div class="match-row">
+
+      <div class="team">
+        Barcelona
+      </div>
+
+      <div class="score">
+        1 : 1
+      </div>
+
+      <div class="team" style="text-align:right;">
+        Real Madrid
+      </div>
+
+    </div>
+
+    <div class="stadium">
+
+      <div>📍 Camp Nou</div>
+
+      <div class="details"
+      onclick="openDetails(
+      'Barcelona vs Real Madrid',
+      '1 : 1',
+      'Camp Nou',
+      '45+2'
+      )">
+        Details >
+      </div>
+
+    </div>
+
   </div>
+
+  <!-- MATCHES END -->
 
 </div>
+<!-- HOME PAGE END -->
 
-<!-- FIXTURES -->
+<!-- DETAILS PAGE START -->
+<div id="detailsPage" class="page">
+
+  <button class="backBtn" onclick="goHome()">
+    ⬅ Back
+  </button>
+
+  <h1 id="detailsTitle"></h1>
+
+  <h2 id="detailsScore" style="margin-top:20px;"></h2>
+
+  <p id="detailsMinute" style="margin-top:20px;"></p>
+
+  <p id="detailsStadium" style="margin-top:10px;"></p>
+
+</div>
+<!-- DETAILS PAGE END -->
+
+<!-- FIXTURES PAGE START -->
 <div id="fixturesPage" class="page">
-  <div class="topbar"><div class="title">Fixtures</div></div>
-  <div class="card">No fixtures yet</div>
+  <h1>📅 Fixtures Page</h1>
 </div>
+<!-- FIXTURES PAGE END -->
 
-<!-- CLUB -->
+<!-- CLUB PAGE START -->
 <div id="clubPage" class="page">
-  <div class="topbar"><div class="title">Club</div></div>
-  <div class="card">Club info coming soon</div>
+  <h1>🛡️ Club Page</h1>
 </div>
+<!-- CLUB PAGE END -->
 
-<!-- STORE -->
+<!-- STORE PAGE START -->
 <div id="storePage" class="page">
-  <div class="topbar"><div class="title">Store</div></div>
-  <div class="card">Store items coming soon</div>
+  <h1>🛒 Store Page</h1>
 </div>
+<!-- STORE PAGE END -->
 
-<!-- PROFILE -->
+<!-- PROFILE PAGE START -->
 <div id="profilePage" class="page">
-  <div class="topbar"><div class="title">Profile</div></div>
-  <div class="card">User profile</div>
+  <h1>👤 Profile Page</h1>
 </div>
+<!-- PROFILE PAGE END -->
 
-<!-- TABS -->
+<!-- TABS START -->
 <div class="tabs">
 
   <div class="tab activeTab" onclick="openTab(this,'homePage')">
-    HOME
+    🏠<br>HOME
   </div>
 
   <div class="tab" onclick="openTab(this,'fixturesPage')">
-    FIXTURES
+    📅<br>FIXTURES
   </div>
 
   <div class="tab" onclick="openTab(this,'clubPage')">
-    CLUB
+    🛡️<br>CLUB
   </div>
 
   <div class="tab" onclick="openTab(this,'storePage')">
-    STORE
+    🛒<br>STORE
   </div>
 
   <div class="tab" onclick="openTab(this,'profilePage')">
-    PROFILE
+    👤<br>PROFILE
   </div>
 
 </div>
+<!-- TABS END -->
 
+<!-- JS START -->
 <script>
+try {
+  Pi.init({ version: "2.0", sandbox: true });
+} catch(e) {
+  console.log("Pi SDK not available:", e.message);
+}
+function openNotifications(){
+  alert("Notifications");
+}
+
+function selectLeague(el,name){
+
+  document.querySelectorAll(".league").forEach(item=>{
+    item.classList.remove("activeLeague");
+  });
+
+  el.classList.add("activeLeague");
+}
+
+function openDetails(title,score,stadium,minute){
+
+  hidePages();
+
+  document.getElementById("detailsPage").classList.add("activePage");
+
+  document.getElementById("detailsTitle").innerHTML = title;
+
+  document.getElementById("detailsScore").innerHTML = score;
+
+  document.getElementById("detailsMinute").innerHTML =
+  "⏱ Minute: " + minute;
+
+  document.getElementById("detailsStadium").innerHTML =
+  "📍 Stadium: " + stadium;
+}
+
+function goHome(){
+
+  hidePages();
+
+  document.getElementById("homePage").classList.add("activePage");
+}
+
 function openTab(el,page){
 
-  document.querySelectorAll(".page").forEach(p=>{
-    p.classList.remove("activePage");
-  });
+  hidePages();
 
   document.getElementById(page).classList.add("activePage");
 
-  document.querySelectorAll(".tab").forEach(t=>{
-    t.classList.remove("activeTab");
+  document.querySelectorAll(".tab").forEach(tab=>{
+    tab.classList.remove("activeTab");
   });
 
   el.classList.add("activeTab");
 }
-</script>
 
+function hidePages(){
+
+  document.querySelectorAll(".activePage").forEach(page=>{
+    page.classList.remove("activePage");
+  });
+}
+
+</script>
+<!-- JS END -->
+<title>Pi Payment Stable</title>
+  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+</head>
+
+<body>
+  <h2>Pi Payment Test</h2>
+
+  <button onclick="login()">Login with Pi</button>
+  <br><br>
+  <button onclick="pay()">Pay with Pi</button>
+
+  <p id="status"></p>
+
+  <script>
+    Pi.init({ version: "2.0", sandbox: true });
+
+    const backendURL = "https://pi-server-3pra.onrender.com";
+    let currentUser = null;
+    let paymentRunning = false;
+
+    function setStatus(msg) {
+      document.getElementById("status").innerText = msg;
+    }
+
+    // ======================
+    // LOGIN
+    // ======================
+    async function login() {
+      try {
+        const scopes = ["username", "payments"];
+        const auth = await Pi.authenticate(scopes);
+
+        currentUser = auth.user;
+        setStatus("Login success: " + currentUser.username);
+
+      } catch (err) {
+        console.error(err);
+        setStatus("Login failed ❌");
+      }
+    }
+
+    // ======================
+    // PAYMENT
+    // ======================
+    async function pay() {
+
+      if (!currentUser) {
+        alert("Banza ukore Login with Pi");
+        return;
+      }
+
+      if (paymentRunning) {
+        alert("Payment iri gukorwa... tegereza");
+        return;
+      }
+
+      paymentRunning = true;
+      setStatus("Opening payment...");
+
+      try {
+
+        await Pi.createPayment(
+          {
+            amount: 1,
+            memo: "Test payment",
+            metadata: { item: "test" }
+          },
+
+          {
+            // ======================
+            // APPROVE
+            // ======================
+            onReadyForServerApproval: async function(paymentId) {
+              try {
+
+                setStatus("Approving payment...");
+
+                const res = await fetch(
+                  backendURL + "/approve-payment",
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ paymentId })
+                  }
+                );
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                  throw new Error("Approval failed");
+                }
+
+                setStatus("Approved ✅");
+
+              } catch (err) {
+                console.error(err);
+                setStatus("Approval failed ❌");
+              }
+            },
+
+            // ======================
+            // COMPLETE
+            // ======================
+            onReadyForServerCompletion: async function(paymentId, txid) {
+              try {
+
+                setStatus("Completing payment...");
+
+                const res = await fetch(
+                  backendURL + "/complete-payment",
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                      paymentId,
+                      txid
+                    })
+                  }
+                );
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                  throw new Error("Completion failed");
+                }
+
+                setStatus("Payment Success ✅");
+
+              } catch (err) {
+                console.error(err);
+                setStatus("Completion failed ❌");
+              }
+
+              paymentRunning = false;
+            },
+
+            // ======================
+            // CANCEL
+            // ======================
+            onCancel: function() {
+              paymentRunning = false;
+              setStatus("Payment cancelled");
+            },
+
+            // ======================
+            // ERROR
+            // ======================
+            onError: function(err) {
+              paymentRunning = false;
+              console.error(err);
+              setStatus("Payment error ❌");
+            }
+          }
+        );
+
+      } catch (err) {
+        paymentRunning = false;
+        console.error(err);
+        setStatus("Payment failed ❌");
+      }
+    }
 </body>
 </html>
