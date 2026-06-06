@@ -2,42 +2,44 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Socker App UI</title>
+  <title>Socker Sports App</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 
   <style>
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
-      background: #0f172a;
+      font-family: Arial;
+      background: #0b1220;
       color: white;
     }
 
     header {
-      padding: 15px;
-      background: #111827;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 12px;
+      background: #111827;
     }
 
     .btn {
       padding: 8px 12px;
       border: none;
       border-radius: 6px;
-      cursor: pointer;
       background: #2563eb;
       color: white;
+      cursor: pointer;
     }
 
     .tabs {
       display: flex;
-      background: #1f2937;
       overflow-x: auto;
+      background: #1f2937;
     }
 
     .tab {
-      padding: 12px 18px;
+      padding: 12px 16px;
       cursor: pointer;
       white-space: nowrap;
     }
@@ -47,8 +49,8 @@
     }
 
     .content {
-      padding: 20px;
       display: none;
+      padding: 15px;
     }
 
     .content.active {
@@ -57,15 +59,20 @@
 
     .card {
       background: #1f2937;
-      padding: 15px;
+      padding: 12px;
       border-radius: 10px;
       margin-bottom: 10px;
     }
 
-    #status {
+    .league {
+      font-weight: bold;
       margin-top: 10px;
+      color: #38bdf8;
+    }
+
+    #status {
       font-size: 14px;
-      color: #a3a3a3;
+      color: #aaa;
     }
   </style>
 </head>
@@ -74,39 +81,51 @@
 
 <header>
   <button class="btn" onclick="goBack()">⬅ Back</button>
-  <h3>Socker App</h3>
+  <h3>⚽ Socker Live</h3>
   <button class="btn" onclick="login()">Login</button>
 </header>
 
 <!-- TABS -->
 <div class="tabs">
-  <div class="tab active" onclick="openTab('home')">Home</div>
-  <div class="tab" onclick="openTab('matches')">Matches</div>
-  <div class="tab" onclick="openTab('premium')">Premium</div>
+  <div class="tab active" onclick="openTab(event,'home')">Live</div>
+  <div class="tab" onclick="openTab(event,'pl')">Premier League</div>
+  <div class="tab" onclick="openTab(event,'laliga')">La Liga</div>
+  <div class="tab" onclick="openTab(event,'seriea')">Serie A</div>
+  <div class="tab" onclick="openTab(event,'premium')">Pay</div>
 </div>
 
-<!-- CONTENT -->
+<!-- LIVE -->
 <div id="home" class="content active">
-  <div class="card">
-    <h3>Welcome</h3>
-    <p>This is Home tab content.</p>
-  </div>
+  <div class="card">🔴 Live Match: Team A vs Team B</div>
+  <div class="card">⏱ Upcoming: Team C vs Team D</div>
 </div>
 
-<div id="matches" class="content">
-  <div class="card">
-    <h3>Live Matches</h3>
-    <p>No matches yet.</p>
-  </div>
+<!-- PREMIER LEAGUE -->
+<div id="pl" class="content">
+  <div class="league">Premier League</div>
+  <div class="card">Arsenal vs Chelsea</div>
+  <div class="card">Man City vs Liverpool</div>
 </div>
 
+<!-- LALIGA -->
+<div id="laliga" class="content">
+  <div class="league">La Liga</div>
+  <div class="card">Real Madrid vs Barcelona</div>
+  <div class="card">Atletico vs Sevilla</div>
+</div>
+
+<!-- SERIE A -->
+<div id="seriea" class="content">
+  <div class="league">Serie A</div>
+  <div class="card">Juventus vs Inter</div>
+  <div class="card">AC Milan vs Napoli</div>
+</div>
+
+<!-- PREMIUM -->
 <div id="premium" class="content">
   <div class="card">
-    <h3>Premium Access</h3>
-    <p>Unlock with Pi Payment</p>
-
+    <h3>💳 Unlock Premium</h3>
     <button class="btn" onclick="pay()">Pay with Pi</button>
-
     <p id="status"></p>
   </div>
 </div>
@@ -114,29 +133,19 @@
 <script src="payment.js"></script>
 
 <script>
-  // ======================
-  // TAB SYSTEM
-  // ======================
-  function openTab(tabId) {
+  function openTab(e, id) {
     let tabs = document.querySelectorAll(".tab");
     let contents = document.querySelectorAll(".content");
 
     tabs.forEach(t => t.classList.remove("active"));
     contents.forEach(c => c.classList.remove("active"));
 
-    event.target.classList.add("active");
-    document.getElementById(tabId).classList.add("active");
+    e.target.classList.add("active");
+    document.getElementById(id).classList.add("active");
   }
 
-  // ======================
-  // BACK BUTTON
-  // ======================
   function goBack() {
-    if (history.length > 1) {
-      history.back();
-    } else {
-      alert("No page to go back to");
-    }
+    history.back();
   }
 </script>
 
