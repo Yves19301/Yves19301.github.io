@@ -4,12 +4,18 @@
   <title>Socker App</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-
   <style>
-    body{margin:0;font-family:Arial;background:#050816;color:white;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{background:#050816;font-family:Arial;color:white;padding-bottom:80px;}
 
-    .topbar{display:flex;justify-content:space-between;align-items:center;padding:15px;background:#0b1020;}
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:15px;
+      background:#0b1020;
+      border-bottom:1px solid #1b2238;
+    }
 
     .title{font-size:24px;font-weight:bold;}
 
@@ -17,29 +23,43 @@
     .activePage{display:block;}
 
     .tabs{
-      position:fixed;bottom:0;width:100%;
-      display:flex;justify-content:space-around;
-      background:#0b1020;padding:10px;
+      position:fixed;
+      bottom:0;
+      width:100%;
+      display:flex;
+      justify-content:space-around;
+      background:#0b1020;
+      padding:12px 0;
+      border-top:1px solid #1b2238;
     }
 
-    .tab{color:#aaa;cursor:pointer;}
-    .activeTab{color:#18d26e;font-weight:bold;}
+    .tab{
+      color:#9aa3bb;
+      font-size:13px;
+      text-align:center;
+      cursor:pointer;
+    }
+
+    .activeTab{
+      color:#18d26e;
+      font-weight:bold;
+    }
+
+    .card{
+      background:#11192d;
+      padding:15px;
+      margin:10px 0;
+      border-radius:12px;
+    }
 
     .btn{
-      margin:10px 15px;
-      padding:12px;
+      padding:10px 15px;
       background:#18d26e;
       border:none;
       border-radius:10px;
       font-weight:bold;
       cursor:pointer;
-    }
-
-    .card{
-      background:#11192d;
-      margin:10px;
-      padding:15px;
-      border-radius:12px;
+      margin-top:10px;
     }
   </style>
 </head>
@@ -53,111 +73,80 @@
     <div class="title">SOCKER ⚽</div>
   </div>
 
-  <button class="btn" onclick="payPi()">💰 Pay with Pi</button>
+  <div class="card">
+    🔴 Live Match
+    <br><br>
+    Manchester City vs Liverpool
+  </div>
 
   <div class="card">
-    Manchester City vs Liverpool
+    📊 Premier League Updates
   </div>
 
 </div>
 
-<!-- DETAILS -->
-<div id="detailsPage" class="page">
-  <h2>Details Page</h2>
+<!-- FIXTURES -->
+<div id="fixturesPage" class="page">
+  <div class="topbar"><div class="title">Fixtures</div></div>
+  <div class="card">No fixtures yet</div>
+</div>
+
+<!-- CLUB -->
+<div id="clubPage" class="page">
+  <div class="topbar"><div class="title">Club</div></div>
+  <div class="card">Club info coming soon</div>
 </div>
 
 <!-- STORE -->
 <div id="storePage" class="page">
-  <h2>Store</h2>
+  <div class="topbar"><div class="title">Store</div></div>
+  <div class="card">Store items coming soon</div>
 </div>
 
 <!-- PROFILE -->
 <div id="profilePage" class="page">
-  <h2>Profile</h2>
+  <div class="topbar"><div class="title">Profile</div></div>
+  <div class="card">User profile</div>
 </div>
 
 <!-- TABS -->
 <div class="tabs">
-  <div class="tab activeTab" onclick="openTab(this,'homePage')">HOME</div>
-  <div class="tab" onclick="openTab(this,'detailsPage')">DETAILS</div>
-  <div class="tab" onclick="openTab(this,'storePage')">STORE</div>
-  <div class="tab" onclick="openTab(this,'profilePage')">PROFILE</div>
+
+  <div class="tab activeTab" onclick="openTab(this,'homePage')">
+    HOME
+  </div>
+
+  <div class="tab" onclick="openTab(this,'fixturesPage')">
+    FIXTURES
+  </div>
+
+  <div class="tab" onclick="openTab(this,'clubPage')">
+    CLUB
+  </div>
+
+  <div class="tab" onclick="openTab(this,'storePage')">
+    STORE
+  </div>
+
+  <div class="tab" onclick="openTab(this,'profilePage')">
+    PROFILE
+  </div>
+
 </div>
 
 <script>
-Pi.init({ version:"2.0", sandbox:true });
-
-let currentUser = null;
-let paymentRunning = false;
-
-// LOGIN auto
-async function login(){
-  try{
-    const auth = await Pi.authenticate(["username","payments"]);
-    currentUser = auth.user;
-  }catch(e){}
-}
-login();
-
-async function payPi(){
-
-  if(!currentUser){
-    alert("Login with Pi first");
-    return;
-  }
-
-  if(paymentRunning) return;
-
-  paymentRunning = true;
-
-  try{
-
-    await Pi.createPayment(
-      {
-        amount:1,
-        memo:"Socker Payment",
-        metadata:{app:"socker"}
-      },
-      {
-        onReadyForServerApproval:function(paymentId){
-          fetch("https://pi-server-3pra.onrender.com/approve-payment",{
-            method:"POST",
-            headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({paymentId})
-          });
-        },
-
-        onReadyForServerCompletion:function(paymentId,txid){
-          fetch("https://pi-server-3pra.onrender.com/complete-payment",{
-            method:"POST",
-            headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({paymentId,txid})
-          })
-          .then(()=>alert("Payment Success ✅"))
-          .finally(()=>paymentRunning=false);
-        },
-
-        onCancel:function(){
-          paymentRunning=false;
-        },
-
-        onError:function(){
-          paymentRunning=false;
-        }
-      }
-    );
-
-  }catch(e){
-    paymentRunning=false;
-  }
-}
-
 function openTab(el,page){
 
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("activePage"));
+  document.querySelectorAll(".page").forEach(p=>{
+    p.classList.remove("activePage");
+  });
+
   document.getElementById(page).classList.add("activePage");
 
-  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("activeTab"));
+  document.querySelectorAll(".tab").forEach(t=>{
+    t.classList.remove("activeTab");
+  });
+
   el.classList.add("activeTab");
 }
 </script>
