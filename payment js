@@ -1,0 +1,138 @@
+Pi.init({ version: "2.0", sandbox: true });
+
+const backendURL = "https://pi-server-3pra.onrender.com";
+
+let currentUser = null;
+let paymentRunning = false;
+
+// ======================
+// STATUS UI
+// ======================
+function setStatus(msg) {
+  const el = document.getElementById("status");
+  if (el) el.innerText = msg;
+}
+
+// ======================
+// LOGIN
+// ======================
+async function login() {
+  try {
+    const auth = await Pi.authenticate(["username", "payments"]);
+    currentUser = auth.user;
+
+    setStatus("Login success: " + currentUser.username);
+  } catch (err) {
+    console.error(err);
+    setStatus("Login failed ❌");
+  }
+}
+
+// ======================
+// PAYMENT SUCCESS HANDLER
+// ======================
+function onPaymentSuccess(txid, paymentId) {
+  console.log("Payment Success:", txid);
+
+  setStatus("Payment Success ✅ Transaction: " + txid);
+
+  // 🔥 Hano ushobora gushyiramo unlock ya app yawe
+  // urugero: unlock content / show tabs / redirect
+  document.body.style.background = "#0f0"; // optional visual success
+}
+
+// ======================
+// PAYMENT
+// ======================
+async function pay() {
+  if (!currentUser) {
+    alert("Banza ukore Login with Pi");
+    return;
+  }
+
+  if (paymentRunning) return;
+
+  paymentRunning = true;
+  setStatus("Opening payment...");
+
+  try {
+    await Pi.createPayment(
+      {
+        amount: 1,
+        memo: "Test payment",
+        metadata: { item: "test" }
+      },
+      {
+        // ======================
+        // APPROVE
+        // ======================
+        onReadyForServerApproval: async function (paymentId) {
+          try {
+            setStatus("Approving payment...");
+
+            const res = await fetch(backendURL + "/approve-payment", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ paymentId })
+            });
+
+            if (!res.ok) throw new Error("Approval failed");
+
+            setStatus("Approved ✅");
+          } catch (err) {
+            console.error(err);
+            setStatus("Approval failed ❌");
+            paymentRunning = false;
+          }
+        },
+
+        // ======================
+        // COMPLETE (SUCCESS POINT)
+        // ======================
+        onReadyForServerCompletion: async function (paymentId, txid) {
+          try {
+            setStatus("Completing payment...");
+
+            const res = await fetch(backendURL + "/complete-payment", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ paymentId, txid })
+            });
+
+            if (!res.ok) throw new Error("Completion failed");
+
+            // 🔥 SUCCESS HERE
+            onPaymentSuccess(txid, paymentId);
+
+          } catch (err) {
+            console.error(err);
+            setStatus("Completion failed ❌");
+          }
+
+          paymentRunning = false;
+        },
+
+        // ======================
+        // CANCEL
+        // ======================
+        onCancel: function () {
+          paymentRunning = false;
+          setStatus("Payment cancelled");
+        },
+
+        // ======================
+        // ERROR
+        // ======================
+        onError: function (err) {
+          paymentRunning = false;
+          console.error(err);
+          setStatus("Payment error ❌");
+        }
+      }
+    );
+  } catch (err) {
+    paymentRunning = false;
+    console.error(err);
+    setStatus("Payment failed ❌");
+  }
+}
